@@ -26,15 +26,15 @@ if [[ "$1" ]]; then
     input_ans_file="${input_prefix}.ans"
     if ! [[ -f "$input_ans_file" ]]; then
 	echo "Create empty input answer file"
-	echo "<answer>" > "$input_ans_file"
+	touch "$input_ans_file"
     fi
 
     # Prepare dummy python solution
-    solution_file="$1.py"
-    if ! [[ -f "$solution_file" ]]; then
-	echo "Create dummy python solution $solution_file"
-	cp "../dummy.py" "$solution_file"
-    fi
+    # solution_file="$1.py"
+    # if ! [[ -f "$solution_file" ]]; then
+	# echo "Create dummy python solution $solution_file"
+	# cp "../dummy.py" "$solution_file"
+    # fi
 
 
     nvim "$solution_file" "${sample_prefix}.in" "${sample_prefix}.ans" -c "norm G$"
