@@ -5,3 +5,7 @@ All solutions expect the input via stdin, which can be easily achieved by piping
 Programs are initialized with the `init-day.sh` script. I.e. typing `init-day.sh 10` initializes the 10th day by creating a folder named `10`, downloading the input test case with the `session.cookie`, copying the `dummy.py` file and opening the solution file.
 
 * 2021: There is a solution for each problem in Julia. Sometimes there is a Python or APL solution as well. I'm trying out Julia for the first time, mostly focusing on short and elegant code. 
+
+## Lines of code
+
+![](./Media/2021loc.png)
