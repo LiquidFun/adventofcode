@@ -6,9 +6,10 @@ Programs are initialized with the `init-day.sh` script. I.e. typing `init-day.sh
 
 * 2021: There is a solution for each problem in Julia. Sometimes there is a Python or APL solution as well. I'm trying out Julia for the first time, mostly focusing on short and elegant code. 
 
-## Lines of code
-
 <!-- REPLACE FROM -->
+<h1 align="center">
+  2021
+</h1>
 <table>
   <tr>
     <td>
@@ -147,5 +148,3 @@ Programs are initialized with the `init-day.sh` script. I.e. typing `init-day.sh
   </tr>
 </table>
 <!-- REPLACE UNTIL -->
-
-![](./Media/2021loc.png)
