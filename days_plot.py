@@ -64,14 +64,16 @@ class HTML:
         return "\n".join(self.tags)
 
 
-def gen_day_graphic(day: str, year: str, languages: list[str]) -> Path:
+def gen_day_graphic(day: str, year: str, languages: list[str], loc: int) -> Path:
     color = extension_to_color[languages[0]] if languages else "#333333"
-    image = Image.new("RGB", (200, 200), color)
+    image = Image.new("RGB", (200, 100), color)
     drawer = ImageDraw(image)
-    main_font = ImageFont.truetype("Media/fonts/PaytoneOne.ttf", 150)
-    side_font = ImageFont.truetype("Media/fonts/SourceCodePro-Regular.otf", 50)
-    drawer.text((0, 20), str(day), fill="white", align="center", font=main_font)
-    drawer.text((0, 0), str(languages[0]), fill="white", align="left", font=side_font)
+    main_font = ImageFont.truetype("Media/fonts/PaytoneOne.ttf", 98)
+    side_font = ImageFont.truetype("Media/fonts/SourceCodePro-Regular.otf", 17)
+    drawer.text((0, -40), str(day), fill="white", align="center", font=main_font)
+    drawer.text((0, 74), ' '.join(languages), fill="white", align="left", font=side_font)
+
+    drawer.text((123, 0), f"LoC:{loc:3}", fill="white", align="right", font=side_font)
     path = aoc_folder / f"Media/{year}/{day}.png"
     path.parent.mkdir(parents=True, exist_ok=True)
     image.save(path)
@@ -81,13 +83,17 @@ def gen_day_graphic(day: str, year: str, languages: list[str]) -> Path:
 def handle_day(day_path: Path, html: HTML):
     languages = []
     solution_file_path = None
+    loc = 0
     for file_path in day_path.glob("*"):
         if file_path.is_file():
             if file_path.suffix.lower() in extension_to_color:
                 if solution_file_path is None:
                     solution_file_path = file_path.relative_to(aoc_folder)
+                    loc = solution_file_path.open().read().count("\n")
                 languages.append(file_path.suffix.lower())
-    day_graphic_path = gen_day_graphic(day_path.name, day_path.parent.name, languages).relative_to(aoc_folder)
+    languages = list(set(languages))
+    day_graphic_path = gen_day_graphic(day_path.name, day_path.parent.name, languages, loc)
+    day_graphic_path = day_graphic_path.relative_to(aoc_folder)
     with html.tag("td"):
         with html.tag("a", href=str(solution_file_path)):
             html.tag("img", closing=False, src=str(day_graphic_path))
