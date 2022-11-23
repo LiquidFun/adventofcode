@@ -208,15 +208,14 @@ def handle_day(day_path: Path, html: HTML, day_scores: DayScores | None):
                     solution_file_path = file_path.relative_to(aoc_folder)
                     loc = solution_file_path.open().read().count("\n")
                 languages.append(file_path.suffix.lower())
-    languages = list(set(languages))
+    languages = sorted(set(languages))
     if DEBUG:
         if day_path.name == "25":
             languages = []
     day_graphic_path = gen_day_graphic(day_path.name, day_path.parent.name, languages, day_scores)
     day_graphic_path = day_graphic_path.relative_to(aoc_folder)
-    with html.tag("td"):
-        with html.tag("a", href=str(solution_file_path)):
-            html.tag("img", closing=False, src=str(day_graphic_path))
+    with html.tag("a", href=str(solution_file_path)):
+        html.tag("img", closing=False, src=str(day_graphic_path), width="198px")
 
 
 def handle_year(year_path: Path):
@@ -227,14 +226,11 @@ def handle_year(year_path: Path):
     html = HTML()
     with html.tag("h1", align="center"):
         html.push(f"{year_path.name}")
-    with html.tag("table"):
-        for day in range(1, 26, 5):
-            with html.tag("tr"):
-                for row in range(5):
-                    day_str = f"{day + row:02}"
-                    day_path = year_path / day_str
-                    if day_path.exists():
-                        handle_day(day_path, html, leaderboard.get(str(day + row), None))
+    for day in range(1, 26):
+        day_str = f"{day:02}"
+        day_path = year_path / day_str
+        if day_path.exists():
+            handle_day(day_path, html, leaderboard.get(str(day), None))
     with open("README.md", "r") as file:
         text = file.read()
 
@@ -247,7 +243,7 @@ def handle_year(year_path: Path):
 
 
 def main():
-    for year_path in get_paths_matching_regex(aoc_folder, YEAR_PATTERN):
+    for year_path in sorted(get_paths_matching_regex(aoc_folder, YEAR_PATTERN), reverse=True):
         print(f"Generating table for year {year_path.name}")
         handle_year(year_path)
 
