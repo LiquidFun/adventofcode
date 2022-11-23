@@ -215,7 +215,7 @@ def handle_day(day_path: Path, html: HTML, day_scores: DayScores | None):
     day_graphic_path = gen_day_graphic(day_path.name, day_path.parent.name, languages, day_scores)
     day_graphic_path = day_graphic_path.relative_to(aoc_folder)
     with html.tag("a", href=str(solution_file_path)):
-        html.tag("img", closing=False, src=str(day_graphic_path), width="198px")
+        html.tag("img", closing=False, src=str(day_graphic_path), width="160px")
 
 
 def handle_year(year_path: Path):
