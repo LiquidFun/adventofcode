@@ -1,0 +1,8 @@
+repos:
+  - repo: local
+    hooks:
+      - id: create-day-tiles
+        name: create-day-tiles
+        entry: python3 ./days_plot.py
+        language: system
+

@@ -34,7 +34,7 @@ def get_extension_to_colors():
     with open(aoc_folder / "Media/github_languages.yml", "r") as file:
         github_languages = yaml.load(file, Loader=yaml.FullLoader)
         for language, data in github_languages.items():
-            if "color" in data and "extensions" in data:
+            if "color" in data and "extensions" in data and data["type"] == "programming":
                 for extension in data["extensions"]:
                     extension_to_color[extension.lower()] = data["color"]
     return extension_to_color
@@ -66,7 +66,7 @@ def parse_leaderboard(leaderboard_path: Path) -> dict[str, DayScores]:
         return leaderboard
 
 
-def request_leaderboard(year) -> dict[str, DayScores]:
+def request_leaderboard(year: int) -> dict[str, DayScores]:
     leaderboard_path = cache_path / f"leaderboard{year}.html"
     if leaderboard_path.exists():
         leaderboard = parse_leaderboard(leaderboard_path)
@@ -117,7 +117,7 @@ class HTML:
 
 
 def darker_color(c: tuple[int, int, int, int]) -> tuple[int, int, int, int]:
-    return (c[0] - 10, c[1] - 10, c[2] - 10, 255)
+    return c[0] - 10, c[1] - 10, c[2] - 10, 255
 
 
 def get_alternating_background(languages, both_parts_completed=True, *, stripe_width=20):
@@ -197,55 +197,62 @@ def gen_day_graphic(day: str, year: str, languages: list[str], day_scores: DaySc
     return path
 
 
-def handle_day(day_path: Path, html: HTML, day_scores: DayScores | None):
+def handle_day(day: int, year: int, day_path: Path, html: HTML, day_scores: DayScores | None):
     languages = []
     solution_file_path = None
-    loc = 0
-    for file_path in day_path.glob("*"):
-        if file_path.is_file():
-            if file_path.suffix.lower() in extension_to_color:
-                if solution_file_path is None:
-                    solution_file_path = file_path.relative_to(aoc_folder)
-                    loc = solution_file_path.open().read().count("\n")
-                languages.append(file_path.suffix.lower())
+    if day_path is not None:
+        for file_path in day_path.glob("*"):
+            if file_path.is_file():
+                if file_path.suffix.lower() in extension_to_color:
+                    if solution_file_path is None:
+                        solution_file_path = file_path.relative_to(aoc_folder)
+                    languages.append(file_path.suffix.lower())
     languages = sorted(set(languages))
     if DEBUG:
-        if day_path.name == "25":
+        if day == 25:
             languages = []
-    day_graphic_path = gen_day_graphic(day_path.name, day_path.parent.name, languages, day_scores)
+    day_graphic_path = gen_day_graphic(f"{day:02}", f"{year:04}", languages, day_scores)
     day_graphic_path = day_graphic_path.relative_to(aoc_folder)
     with html.tag("a", href=str(solution_file_path)):
-        html.tag("img", closing=False, src=str(day_graphic_path), width="160px")
+        html.tag("img", closing=False, src=str(day_graphic_path), width="161px")
 
 
-def handle_year(year_path: Path):
-    leaderboard = request_leaderboard(year_path.name)
+def find_first_number(string: str) -> int:
+    return int(re.findall(r"\d+", string)[0])
+
+
+def handle_year(year_path: Path, year: int):
+    leaderboard = request_leaderboard(year)
     if DEBUG:
         leaderboard["25"] = None
         leaderboard["24"] = DayScores("22:22:22", "12313", "0")
     html = HTML()
     with html.tag("h1", align="center"):
-        html.push(f"{year_path.name}")
-    for day in range(1, 26):
-        day_str = f"{day:02}"
-        day_path = year_path / day_str
-        if day_path.exists():
-            handle_day(day_path, html, leaderboard.get(str(day), None))
+        html.push(f"{year}")
+    days_with_filled_gaps = {find_first_number(p.name): p for p in get_paths_matching_regex(year_path, DAY_PATTERN)}
+    max_day = max(*days_with_filled_gaps, *map(int, leaderboard))
+    for day in range(1, max_day + 1):
+        if day not in days_with_filled_gaps:
+            days_with_filled_gaps[day] = None
+    for day, day_path in days_with_filled_gaps.items():
+        handle_day(day, year, day_path, html, leaderboard.get(str(day), None))
+
     with open("README.md", "r") as file:
         text = file.read()
-
         begin = "<!-- REPLACE FROM -->"
         end = "<!-- REPLACE UNTIL -->"
         pattern = re.compile(rf"{begin}.*{end}", re.DOTALL | re.MULTILINE)
         new_text = pattern.sub(f"{begin}\n{html}\n{end}", text)
+
     with open("README.md", "w") as file:
         file.write(str(new_text))
 
 
 def main():
     for year_path in sorted(get_paths_matching_regex(aoc_folder, YEAR_PATTERN), reverse=True):
-        print(f"Generating table for year {year_path.name}")
-        handle_year(year_path)
+        year = find_first_number(year_path.name)
+        print(f"Generating table for year {year}")
+        handle_year(year_path, year)
 
 
 if __name__ == '__main__':
