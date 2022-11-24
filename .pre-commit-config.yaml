@@ -3,6 +3,6 @@ repos:
     hooks:
       - id: create-day-tiles
         name: create-day-tiles
-        entry: python3 ./days_plot.py
+        entry: python3 ./create_aoc_tiles.py
         language: system
 

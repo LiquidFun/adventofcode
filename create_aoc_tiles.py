@@ -1,9 +1,23 @@
-# Author: LiquidFun
-# Source: https://github.com/LiquidFun/adventofcode
+"""
+Author: LiquidFun
+Source: https://github.com/LiquidFun/adventofcode
 
+To use this script, you need to have a file named
+"session.cookie" in the same folder as this script.
+
+It should contain a single file, the "session" cookie
+when logged in to https://adventofcode.com. Just
+paste it in there.
+
+Then install the requirements as listed in the requirements.txt:
+    pip install -r requirements.txt
+
+Then run the script:
+    python create_aoc_tiles.py
+"""
 import itertools
+import math
 from collections import namedtuple
-from dataclasses import dataclass
 from functools import cache
 from pathlib import Path
 import re
@@ -141,10 +155,11 @@ def get_alternating_background(languages, both_parts_completed=True, *, stripe_w
 
 @cache
 def get_font(name: str, size: int):
-    return ImageFont.truetype(name, size)
+    return ImageFont.truetype(str(aoc_folder / name), size)
 
 
 def fmt_time(time: str) -> str:
+    """Formats time as mm:ss if the time is below 1 hour, otherwise it returns >1h to a max of >24h"""
     time = time.replace("&gt;", ">")
     if ">" in time:
         formatted = time
@@ -154,42 +169,52 @@ def fmt_time(time: str) -> str:
     return f"{formatted:>5}"
 
 
+def draw_star(drawer: ImageDraw, at: tuple[int, int], size=9, color="#ffff0022", num_points=5):
+    """Draws a star at the given position"""
+    diff = math.pi * 2 / num_points / 2
+    points: list[tuple[float, float]] = []
+    for angle in [diff * i - math.pi / 2 for i in range(num_points * 2)]:
+        factor = size if len(points) % 2 == 0 else size * .4
+        points.append((at[0] + math.cos(angle) * factor, at[1] + math.sin(angle) * factor))
+    drawer.polygon(points, fill=color)
+
+
 def gen_day_graphic(day: str, year: str, languages: list[str], day_scores: DayScores | None) -> Path:
+    """Saves a graphic for a given day and year. Returns the path to it."""
     image = get_alternating_background(languages, not (day_scores is None or day_scores.time2 is None))
     drawer = ImageDraw(image)
     paytone = lambda size: get_font("Media/fonts/PaytoneOne.ttf", size)
     source_code = lambda size: get_font("Media/fonts/SourceCodePro-Regular.otf", size)
-    drawer.text((1, -10), str(day), fill="white", align="center", font=paytone(75))
+    font_color = "white"
+
+    # === Left side ===
+    drawer.text((3, -5), "Day", fill=font_color, align="left", font=paytone(20))
+    drawer.text((1, -10), str(day), fill=font_color, align="center", font=paytone(75))
+    # Calculate font size based on number of characters, because it might overflow
     lang_as_str = ' '.join(languages)
     lang_font_size = max(6, int(18 - max(0, len(lang_as_str) - 8) * 1.3))
-    drawer.text((0, 74), lang_as_str, fill="white", align="left", font=source_code(lang_font_size))
-    drawer.text((3, -5), "Day", fill="white", align="left", font=paytone(20))
+    drawer.text((0, 74), lang_as_str, fill=font_color, align="left", font=source_code(lang_font_size))
 
-    # drawer.text((123, 0), f"LoC:{loc:3}", fill="white", align="right", font=source_code(18))
-
-    if day_scores is not None and day_scores.time1 is not None:
-        drawer.text((104, -5), "P1 ", fill="white", align="left", font=paytone(25))
-        drawer.text((105, 25), "time", fill="white", align="right", font=source_code(8))
-        drawer.text((105, 35), "rank", fill="white", align="right", font=source_code(8))
-        drawer.text((143, 3), fmt_time(day_scores.time1), fill="white", align="right", font=source_code(18))
-        drawer.text((143, 23), f"{day_scores.rank1:>5}", fill="white", align="right", font=source_code(18))
-    else:
-        drawer.line((140, 15, 160, 35), fill="white", width=2)
-        drawer.line((140, 35, 160, 15), fill="white", width=2)
-    if day_scores is not None and day_scores.time2 is not None:
-        drawer.text((104, 45), "P2 ", fill="white", align="left", font=paytone(25))
-        drawer.text((105, 75), "time", fill="white", align="right", font=source_code(8))
-        drawer.text((105, 85), "rank", fill="white", align="right", font=source_code(8))
-        drawer.text((143, 53), fmt_time(day_scores.time2), fill="white", align="right", font=source_code(18))
-        drawer.text((143, 73), f"{day_scores.rank2:>5}", fill="white", align="right", font=source_code(18))
-    else:
-        drawer.line((140, 65, 160, 85), fill="white", width=2)
-        drawer.line((140, 85, 160, 65), fill="white", width=2)
+    # === Right side (P1 & P2) ===
+    for part in (1, 2):
+        time, rank = getattr(day_scores, f"time{part}"), getattr(day_scores, f"rank{part}")
+        y = 50 if part == 2 else 0
+        if day_scores is not None and time is not None:
+            drawer.text((104, -5 + y), f"P{part} ", fill=font_color, align="left", font=paytone(25))
+            drawer.text((105, 25 + y), "time", fill=font_color, align="right", font=source_code(10))
+            drawer.text((105, 35 + y), "rank", fill=font_color, align="right", font=source_code(10))
+            drawer.text((143, 3 + y), fmt_time(time), fill=font_color, align="right", font=source_code(18))
+            drawer.text((133, 23 + y), f"{rank:>6}", fill=font_color, align="right", font=source_code(18))
+        else:
+            drawer.line((140, 15 + y, 160, 35 + y), fill=font_color, width=2)
+            drawer.line((140, 35 + y, 160, 15 + y), fill=font_color, width=2)
 
     if day_scores is None:
-        drawer.line((10, 85, 70, 85), fill="white", width=2)
-    drawer.line((100, 5, 100, 95), fill="white", width=1)
-    drawer.line((105, 50, 195, 50), fill="white", width=1)
+        drawer.line((10, 85, 70, 85), fill=font_color, width=2)
+
+    # === Divider lines ===
+    drawer.line((100, 5, 100, 95), fill=font_color, width=1)
+    drawer.line((105, 50, 195, 50), fill=font_color, width=1)
 
     path = aoc_folder / f"Media/{year}/{day}.png"
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -214,7 +239,7 @@ def handle_day(day: int, year: int, day_path: Path, html: HTML, day_scores: DayS
     day_graphic_path = gen_day_graphic(f"{day:02}", f"{year:04}", languages, day_scores)
     day_graphic_path = day_graphic_path.relative_to(aoc_folder)
     with html.tag("a", href=str(solution_file_path)):
-        html.tag("img", closing=False, src=str(day_graphic_path), width="161px")
+        html.tag("img", closing=False, src=str(day_graphic_path), width="162px")
 
 
 def find_first_number(string: str) -> int:
@@ -251,7 +276,7 @@ def handle_year(year_path: Path, year: int):
 def main():
     for year_path in sorted(get_paths_matching_regex(aoc_folder, YEAR_PATTERN), reverse=True):
         year = find_first_number(year_path.name)
-        print(f"Generating table for year {year}")
+        print(f"=== Generating table for year {year} ===")
         handle_year(year_path, year)
 
 
