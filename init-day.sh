@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-year="2021"
+year="2022"
 cookie=$(cat session.cookie)
 input_prefix="input"
 sample_prefix="example"

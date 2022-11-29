@@ -5,7 +5,7 @@ Source: https://github.com/LiquidFun/adventofcode
 To use this script, you need to have a file named
 "session.cookie" in the same folder as this script.
 
-It should contain a single file, the "session" cookie
+It should contain a single line, the "session" cookie
 when logged in to https://adventofcode.com. Just
 paste it in there.
 
@@ -28,24 +28,42 @@ import yaml
 from PIL.ImageDraw import ImageDraw
 from PIL import ImageFont
 
-DEBUG = False
 
+# The year and day pattern to detect directories. For example, if your day folders are
+# called "day1" to "day25" then set the pattern to r"day\d{1,2}". The script extracts
+# a number from the folder and tries to guess its day that way.
 YEAR_PATTERN = r"\d{4}"
 DAY_PATTERN = r"\d{2}"
 
-self_leaderboard_url = "https://adventofcode.com/{year}/leaderboard/self"
+# 161px is a rather specific number, with it exactly 5 tiles fit into a row. It is possible to go
+# to 162px, however then 1080p displays show 4 tiles in a row, and phone displays show 1 tile
+# instead of 2 in a row. Therefore, 161px is used here.
+TILE_WIDTH_PX = "161px"
 
-aoc_folder = Path("__file__").absolute().parent
-cache_path = aoc_folder / ".cache"
+
+NOT_COMPLETED_COLOR = ImageColor.getrgb("#333333")
+
+
+# This results in the parent folder of the script, the year folders should be here
+AOC_FOLDER = Path("__file__").absolute().parent
+
+# Cache path is a subfolder of the AOC folder, it includes the personal leaderboards for each year
+CACHE_PATH = AOC_FOLDER / ".cache"
+
+# === The following do not need to be changed ===
+# Overrides day 24 part 2 and day 25 both parts to be unsolved
+DEBUG = False
+
+# URL for the personal leaderboard (same for everyone)
+PERSONAL_LEADERBOARD_URL = "https://adventofcode.com/{year}/leaderboard/self"
 
 DayScores = namedtuple("DayScores", ["time1", "rank1", "score1", "time2", "rank2", "score2"], defaults=[None] * 3)
 
-not_completed_color = ImageColor.getrgb("#333333")
 
 
 def get_extension_to_colors():
     extension_to_color = {}
-    with open(aoc_folder / "Media/github_languages.yml", "r") as file:
+    with open(AOC_FOLDER / "Media/github_languages.yml", "r") as file:
         github_languages = yaml.load(file, Loader=yaml.FullLoader)
         for language, data in github_languages.items():
             if "color" in data and "extensions" in data and data["type"] == "programming":
@@ -81,7 +99,7 @@ def parse_leaderboard(leaderboard_path: Path) -> dict[str, DayScores]:
 
 
 def request_leaderboard(year: int) -> dict[str, DayScores]:
-    leaderboard_path = cache_path / f"leaderboard{year}.html"
+    leaderboard_path = CACHE_PATH / f"leaderboard{year}.html"
     if leaderboard_path.exists():
         leaderboard = parse_leaderboard(leaderboard_path)
         has_no_none_values = all(itertools.chain(map(list, leaderboard.values())))
@@ -89,7 +107,7 @@ def request_leaderboard(year: int) -> dict[str, DayScores]:
             return leaderboard
     with open("session.cookie") as cookie_file:
         session_cookie = cookie_file.read().strip()
-        data = requests.get(self_leaderboard_url.format(year=year), cookies={"session": session_cookie}).text
+        data = requests.get(PERSONAL_LEADERBOARD_URL.format(year=year), cookies={"session": session_cookie}).text
         with open(leaderboard_path, "w") as file:
             file.write(data)
     return parse_leaderboard(leaderboard_path)
@@ -138,7 +156,7 @@ def get_alternating_background(languages, both_parts_completed=True, *, stripe_w
     colors = [ImageColor.getrgb(extension_to_color[language]) for language in languages]
     if len(colors) == 1:
         colors.append(darker_color(colors[0]))
-    image = Image.new("RGB", (200, 100), not_completed_color)
+    image = Image.new("RGB", (200, 100), NOT_COMPLETED_COLOR)
 
     def fill_with_colors(colors, fill_only_half):
         for x in range(image.width):
@@ -147,7 +165,7 @@ def get_alternating_background(languages, both_parts_completed=True, *, stripe_w
                     continue
                 image.load()[x, y] = colors[((x + y) // stripe_width) % len(colors)]
 
-    fill_with_colors([not_completed_color, darker_color(not_completed_color)], False)
+    fill_with_colors([NOT_COMPLETED_COLOR, darker_color(NOT_COMPLETED_COLOR)], False)
     if colors:
         fill_with_colors(colors, not both_parts_completed)
     return image
@@ -155,7 +173,7 @@ def get_alternating_background(languages, both_parts_completed=True, *, stripe_w
 
 @cache
 def get_font(name: str, size: int):
-    return ImageFont.truetype(str(aoc_folder / name), size)
+    return ImageFont.truetype(str(AOC_FOLDER / name), size)
 
 
 def fmt_time(time: str) -> str:
@@ -216,7 +234,7 @@ def gen_day_graphic(day: str, year: str, languages: list[str], day_scores: DaySc
     drawer.line((100, 5, 100, 95), fill=font_color, width=1)
     drawer.line((105, 50, 195, 50), fill=font_color, width=1)
 
-    path = aoc_folder / f"Media/{year}/{day}.png"
+    path = AOC_FOLDER / f"Media/{year}/{day}.png"
     path.parent.mkdir(parents=True, exist_ok=True)
     image.save(path)
     return path
@@ -230,16 +248,16 @@ def handle_day(day: int, year: int, day_path: Path, html: HTML, day_scores: DayS
             if file_path.is_file():
                 if file_path.suffix.lower() in extension_to_color:
                     if solution_file_path is None:
-                        solution_file_path = file_path.relative_to(aoc_folder)
+                        solution_file_path = file_path.relative_to(AOC_FOLDER)
                     languages.append(file_path.suffix.lower())
     languages = sorted(set(languages))
     if DEBUG:
         if day == 25:
             languages = []
     day_graphic_path = gen_day_graphic(f"{day:02}", f"{year:04}", languages, day_scores)
-    day_graphic_path = day_graphic_path.relative_to(aoc_folder)
+    day_graphic_path = day_graphic_path.relative_to(AOC_FOLDER)
     with html.tag("a", href=str(solution_file_path)):
-        html.tag("img", closing=False, src=str(day_graphic_path), width="162px")
+        html.tag("img", closing=False, src=str(day_graphic_path), width=TILE_WIDTH_PX)
 
 
 def find_first_number(string: str) -> int:
@@ -255,6 +273,9 @@ def handle_year(year_path: Path, year: int):
     with html.tag("h1", align="center"):
         html.push(f"{year}")
     days_with_filled_gaps = {find_first_number(p.name): p for p in get_paths_matching_regex(year_path, DAY_PATTERN)}
+    if len(days_with_filled_gaps) == 0:
+        print(f"Year {year} is empty!")
+        return
     max_day = max(*days_with_filled_gaps, *map(int, leaderboard))
     for day in range(1, max_day + 1):
         if day not in days_with_filled_gaps:
@@ -264,8 +285,8 @@ def handle_year(year_path: Path, year: int):
 
     with open("README.md", "r") as file:
         text = file.read()
-        begin = "<!-- REPLACE FROM -->"
-        end = "<!-- REPLACE UNTIL -->"
+        begin = "<!-- AOC TILES BEGIN -->"
+        end = "<!-- AOC TILES END -->"
         pattern = re.compile(rf"{begin}.*{end}", re.DOTALL | re.MULTILINE)
         new_text = pattern.sub(f"{begin}\n{html}\n{end}", text)
 
@@ -274,7 +295,7 @@ def handle_year(year_path: Path, year: int):
 
 
 def main():
-    for year_path in sorted(get_paths_matching_regex(aoc_folder, YEAR_PATTERN), reverse=True):
+    for year_path in sorted(get_paths_matching_regex(AOC_FOLDER, YEAR_PATTERN), reverse=True):
         year = find_first_number(year_path.name)
         print(f"=== Generating table for year {year} ===")
         handle_year(year_path, year)
