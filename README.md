@@ -4,10 +4,10 @@
 
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2022
+  2022 - 0 ⭐
 </h1>
 <h1 align="center">
-  2021
+  2021 - 50 ⭐
 </h1>
 <a href="2021/01/1.apl">
   <img src="Media/2021/01.png" width="161px">
@@ -89,7 +89,7 @@
 
 ---
 
-The graphic above has been created with [this](create_aoc_tiles.py) script. Feel free to use it in your own repositories.
+The graphic above has been created with [this](AoCTiles/create_aoc_tiles.py) script. Feel free to use it in your own repositories.
 
 ---
 
