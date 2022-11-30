@@ -89,12 +89,12 @@
 
 ---
 
-The graphic above has been created with [this](AoCTiles/create_aoc_tiles.py) script. Feel free to use it in your own repositories.
+The graphic above has been created with [AoCTiles/create_aoc_tiles.py](AoCTiles/create_aoc_tiles.py) script. Feel free to use it in your own repositories. See the [AoCTiles/README.md](AoCTiles/README.md) for instructions on how to use it.
 
 ---
 
 
-All solutions expect the input via stdin, which can be easily achieved by piping the input to the program: `julia 1.jl < input.in`. I use the `program-tester.sh` script (see [here](https://github.com/LiquidFun/misc-scripts)), which runs the given program on all `*.in` files in the directory, and tests whether the corresponding `*.ans` file matches the given output. Each program outputs both part 1 and part 2 on separate lines. To validate a program manually, type `diff <(julia 1.jl < input.in) input.ans`.
+All solutions expect the input via `stdin` and print to `stdout`. Each solution always prints part 1 and 2 at the same time on separate lines. In order to test the programs you can pipi the input to the program: `julia 1.jl < input.in`, which is then compared to `input.ans`. Instead of doing this manually, I use my `program-tester.sh` script (see [here](https://github.com/LiquidFun/misc-scripts)), which runs the given program on all `*.in` files in the directory, and tests whether the corresponding `*.ans` file matches the given output. I have mapped that program on `Enter` in vim, which makes testing programs easy. To validate a program manually, type `diff <(julia 1.jl < input.in) input.ans`.
 
 Programs are initialized with the `init-day.sh` script. I.e. typing `init-day.sh 10` initializes the 10th day by creating a folder named `10`, downloading the input test case with the `session.cookie`, copying the `dummy.py` file and opening the solution file.
 

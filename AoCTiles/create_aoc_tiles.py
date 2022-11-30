@@ -65,7 +65,7 @@ NOT_COMPLETED_COLOR = ImageColor.getrgb("#333333")
 # instead of 2 in a row. Therefore, 161px is used here.
 TILE_WIDTH_PX = "161px"
 
-# This results in the parent folder of the script, the year folders should be here
+# This results in the parent folder of the script file
 AOC_TILES_SCRIPT_DIR = Path(__file__).absolute().parent
 
 # Cache path is a subfolder of the AOC folder, it includes the personal leaderboards for each year
@@ -152,7 +152,7 @@ class HTMLTag:
         self.tag = tag
         self.closing = closing
         self.kwargs = kwargs
-        attributes = ''.join(f' {k}="{v}"' for k, v in self.kwargs.items())
+        attributes = "".join(f' {k}="{v}"' for k, v in self.kwargs.items())
         self.parent.push(f"<{self.tag}{attributes}>", depth=self.closing)
 
     def __enter__(self):
@@ -204,7 +204,7 @@ def get_alternating_background(languages, both_parts_completed=True, *, stripe_w
     return image
 
 
-def fmt_time(time: str) -> str:
+def format_time(time: str) -> str:
     """Formats time as mm:ss if the time is below 1 hour, otherwise it returns >1h to a max of >24h"""
     time = time.replace("&gt;", ">")
     if ">" in time:
@@ -220,12 +220,12 @@ def draw_star(drawer: ImageDraw, at: tuple[int, int], size=9, color="#ffff0022",
     diff = math.pi * 2 / num_points / 2
     points: list[tuple[float, float]] = []
     for angle in [diff * i - math.pi / 2 for i in range(num_points * 2)]:
-        factor = size if len(points) % 2 == 0 else size * .4
+        factor = size if len(points) % 2 == 0 else size * 0.4
         points.append((at[0] + math.cos(angle) * factor, at[1] + math.sin(angle) * factor))
     drawer.polygon(points, fill=color)
 
 
-def gen_day_graphic(day: str, year: str, languages: list[str], day_scores: DayScores | None) -> Path:
+def generate_day_tile_image(day: str, year: str, languages: list[str], day_scores: DayScores | None) -> Path:
     """Saves a graphic for a given day and year. Returns the path to it."""
     image = get_alternating_background(languages, not (day_scores is None or day_scores.time2 is None))
     drawer = ImageDraw(image)
@@ -235,7 +235,7 @@ def gen_day_graphic(day: str, year: str, languages: list[str], day_scores: DaySc
     drawer.text((3, -5), "Day", fill=font_color, align="left", font=main_font(20))
     drawer.text((1, -10), str(day), fill=font_color, align="center", font=main_font(75))
     # Calculate font size based on number of characters, because it might overflow
-    lang_as_str = ' '.join(languages)
+    lang_as_str = " ".join(languages)
     lang_font_size = max(6, int(18 - max(0, len(lang_as_str) - 8) * 1.3))
     drawer.text((0, 74), lang_as_str, fill=font_color, align="left", font=secondary_font(lang_font_size))
 
@@ -247,7 +247,7 @@ def gen_day_graphic(day: str, year: str, languages: list[str], day_scores: DaySc
             drawer.text((104, -5 + y), f"P{part} ", fill=font_color, align="left", font=main_font(25))
             drawer.text((105, 25 + y), "time", fill=font_color, align="right", font=secondary_font(10))
             drawer.text((105, 35 + y), "rank", fill=font_color, align="right", font=secondary_font(10))
-            drawer.text((143, 3 + y), fmt_time(time), fill=font_color, align="right", font=secondary_font(18))
+            drawer.text((143, 3 + y), format_time(time), fill=font_color, align="right", font=secondary_font(18))
             drawer.text((133, 23 + y), f"{rank:>6}", fill=font_color, align="right", font=secondary_font(18))
         else:
             drawer.line((140, 15 + y, 160, 35 + y), fill=font_color, width=2)
@@ -280,7 +280,7 @@ def handle_day(day: int, year: int, day_path: Path, html: HTML, day_scores: DayS
     if DEBUG:
         if day == 25:
             languages = []
-    day_graphic_path = gen_day_graphic(f"{day:02}", f"{year:04}", languages, day_scores)
+    day_graphic_path = generate_day_tile_image(f"{day:02}", f"{year:04}", languages, day_scores)
     day_graphic_path = day_graphic_path.relative_to(AOC_DIR)
     with html.tag("a", href=str(solution_file_path)):
         html.tag("img", closing=False, src=str(day_graphic_path), width=TILE_WIDTH_PX)
@@ -328,5 +328,5 @@ def main():
         handle_year(year_path, year)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
