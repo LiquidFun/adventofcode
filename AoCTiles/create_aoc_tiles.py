@@ -130,7 +130,10 @@ def parse_leaderboard(leaderboard_path: Path) -> dict[str, DayScores]:
         leaderboard = {}
         for line in table_rows:
             day, *scores = re.split(r"\s+", line.strip())
-            assert len(scores) in (3, 6), f"Number scores for {day=} ({scores}) are not 3 or 6."
+            # replace "-" with None to be able to handle the data later, like if no score existed for the day
+            scores = [s if s != "-" else None for s in scores]
+            assert len(scores) in (
+                3, 6), f"Number scores for {day=} ({scores}) are not 3 or 6."
             leaderboard[day] = DayScores(*scores)
         return leaderboard
 
