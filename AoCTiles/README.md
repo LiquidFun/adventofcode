@@ -5,28 +5,31 @@ A tile is an image which represents both parts of a day, it looks like this:
 
 ![AoC Tiles](examples/basic.png)
 
-It uses the personal [AoC Leaderboard](https://adventofcode.com/2021/leaderboard/self) to get the data
-for each day using your cookie. 
+It uses the personal [AoC Leaderboard](https://adventofcode.com/2021/leaderboard/self) to get the data for each day using your cookie. 
+
+Set the `SHOW_CHECKMARK_INSTEAD_OF_TIME_RANK` flag to True to get this instead:
+
+![AoC Tiles Checkmark](examples/checkmarks.png)
 
 ## Installation
 
-Feel free to use it, here is a short description of how to get it working.
+Feel free to use it, here is a short description of how to get it working:
+
+Copy this entire folder into your AoC repository. Then install the requirements.
 
 ### Requirements
 
 Install at least Python 3.9.
 
 Install requirements:
-    
+
 ```
 pip install -r requirements.txt
 ```
 
 ### Configuration
 
-To use this script, you need to have a file named
-"session.cookie" in the same folder as this script.
-
+To use this script, you need to have a file named "session.cookie" in the same folder as this script.
 It should contain a single line, the "session" cookie
 when logged in to https://adventofcode.com. Just
 paste it in there.

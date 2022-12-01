@@ -81,7 +81,7 @@
 <a href="2021/23/23.jl">
   <img src="Media/2021/23.png" width="161px">
 </a>
-<a href="2021/24/24.pl">
+<a href="2021/24/24makecpp.jl">
   <img src="Media/2021/24.png" width="161px">
 </a>
 <a href="2021/25/25.jl">

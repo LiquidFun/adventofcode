@@ -52,6 +52,10 @@ SESSION_COOKIE_PATH = AOC_DIR / "session.cookie"
 # completed days will still be created.
 CREATE_ALL_DAYS = False
 
+# Instead of showing the time and rank you achieved this just shows whether
+# it was completed with a checkmark
+SHOW_CHECKMARK_INSTEAD_OF_TIME_RANK = False
+
 # ======================================================
 # === The following likely do not need to be changed ===
 # ======================================================
@@ -242,10 +246,14 @@ def generate_day_tile_image(day: str, year: str, languages: list[str], day_score
 
     # === Right side (P1 & P2) ===
     for part in (1, 2):
-        time, rank = getattr(day_scores, f"time{part}", None), getattr(day_scores, f"rank{part}", None)
         y = 50 if part == 2 else 0
+        time, rank = getattr(day_scores, f"time{part}", None), getattr(day_scores, f"rank{part}", None)
         if day_scores is not None and time is not None:
             drawer.text((104, -5 + y), f"P{part} ", fill=font_color, align="left", font=main_font(25))
+            if SHOW_CHECKMARK_INSTEAD_OF_TIME_RANK:
+                drawer.line((160, 35 + y, 150, 25 + y), fill=font_color, width=2)
+                drawer.line((160, 35 + y, 180, 15 + y), fill=font_color, width=2)
+                continue
             drawer.text((105, 25 + y), "time", fill=font_color, align="right", font=secondary_font(10))
             drawer.text((105, 35 + y), "rank", fill=font_color, align="right", font=secondary_font(10))
             drawer.text((143, 3 + y), format_time(time), fill=font_color, align="right", font=secondary_font(18))
