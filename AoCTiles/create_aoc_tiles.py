@@ -114,7 +114,7 @@ def get_paths_matching_regex(path: Path, pattern: str):
 
 def parse_leaderboard(leaderboard_path: Path) -> dict[str, DayScores]:
     no_stars = "You haven't collected any stars... yet."
-    start = '<span class="leaderboard-daydesc-both">    Time   Rank  Score</span>\n'
+    start = '<span class="leaderboard-daydesc-both"> *Time *Rank *Score</span>\n'
     end = "</pre>"
     with open(leaderboard_path) as file:
         html = file.read()
@@ -141,6 +141,7 @@ def request_leaderboard(year: int) -> dict[str, DayScores]:
     with open(SESSION_COOKIE_PATH) as cookie_file:
         session_cookie = cookie_file.read().strip()
         data = requests.get(PERSONAL_LEADERBOARD_URL.format(year=year), cookies={"session": session_cookie}).text
+        leaderboard_path.parent.mkdir(exist_ok=True, parents=True)
         with open(leaderboard_path, "w") as file:
             file.write(data)
     return parse_leaderboard(leaderboard_path)
