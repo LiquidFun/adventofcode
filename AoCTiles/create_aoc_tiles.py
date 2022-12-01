@@ -29,12 +29,6 @@ import yaml
 from PIL.ImageDraw import ImageDraw
 from PIL import ImageFont
 
-# The year and day pattern to detect directories. For example, if your day folders are
-# called "day1" to "day25" then set the pattern to r"day\d{1,2}". The script extracts
-# a number from the folder and tries to guess its day that way.
-YEAR_PATTERN = r"\d{4}"
-DAY_PATTERN = r"\d{2}"
-
 # This results in the parent directory of the script directory, the year directories should be here
 AOC_DIR = Path(__file__).absolute().parent.parent
 
@@ -55,6 +49,55 @@ CREATE_ALL_DAYS = False
 # Instead of showing the time and rank you achieved this just shows whether
 # it was completed with a checkmark
 SHOW_CHECKMARK_INSTEAD_OF_TIME_RANK = False
+
+# The year and day pattern to detect directories. For example, if your day folders are
+# called "day1" to "day25" then set the pattern to r"day\d{1,2}". The script extracts
+# a number from the folder and tries to guess its day that way.
+YEAR_PATTERN = r"\d{4}"
+DAY_PATTERN = r"\d{2}"
+
+
+# You can change this code entirely, or just change patterns above. You get more control if you change the code.
+def get_solution_paths_dict_for_years() -> dict[int, dict[int, list[str]]]:
+    """Returns a dictionary which maps years to days to a list of solution paths,
+
+    E.g.: {2022: {1: [Path("2022/01/01.py"), Path("2022/01/01.kt")], ...}}
+
+    This functions gives you more control of which solutions should be shown in the tiles. For example, you
+    can filter by extension, or only show a single solution, or show tiles for days that have been completed
+    but do not have a solution.
+
+    These can also be links to external solutions, e.g. if you want to show a solution from a different repository.
+    (Untested however)
+
+    """
+    solution_paths_dict: dict[int, dict[int, list[str]]] = {}
+
+    # If you use a new repo for years you might just remove this if, and assign the year manually
+    for year_dir in sorted(get_paths_matching_regex(AOC_DIR, YEAR_PATTERN), reverse=True):
+        year = find_first_number(year_dir.name)
+        solution_paths_dict[year] = {}
+        # If you have a deep structure then you can adjust the year dir as well:
+        # year_dir = year_dir / "src/main/kotlin/com/example/aoc"
+        for day_dir in get_paths_matching_regex(year_dir, DAY_PATTERN):
+            day = find_first_number(day_dir.name)
+            solutions = sorted(find_recursive_solution_files(day_dir))
+
+            # To filter by extension:
+            # solutions = [s for s in solutions if s.suffix == ".py"]
+
+            # To only show a single solution:
+            # solutions = [solutions[0]]
+
+            # To show tiles for days that have been completed but do not have a solution:
+            # if len(solutions) == 0:
+            #     solutions = [Path("dummy.kt")]
+
+            solutions = [solution.relative_to(AOC_DIR) for solution in solutions]
+
+            solution_paths_dict[year][day] = [str(s) for s in solutions]
+    return solution_paths_dict
+
 
 # ======================================================
 # === The following likely do not need to be changed ===
@@ -116,7 +159,15 @@ def get_paths_matching_regex(path: Path, pattern: str):
     return sorted([p for p in path.iterdir() if re.fullmatch(pattern, p.name)])
 
 
-def parse_leaderboard(leaderboard_path: Path) -> dict[str, DayScores]:
+def find_recursive_solution_files(directory: Path) -> list[Path]:
+    solution_paths = []
+    for path in directory.rglob('*'):
+        if path.is_file() and path.suffix in extension_to_color:
+            solution_paths.append(path)
+    return solution_paths
+
+
+def parse_leaderboard(leaderboard_path: Path) -> dict[int, DayScores]:
     no_stars = "You haven't collected any stars... yet."
     start = '<span class="leaderboard-daydesc-both"> *Time *Rank *Score</span>\n'
     end = "</pre>"
@@ -134,11 +185,11 @@ def parse_leaderboard(leaderboard_path: Path) -> dict[str, DayScores]:
             scores = [s if s != "-" else None for s in scores]
             assert len(scores) in (
                 3, 6), f"Number scores for {day=} ({scores}) are not 3 or 6."
-            leaderboard[day] = DayScores(*scores)
+            leaderboard[int(day)] = DayScores(*scores)
         return leaderboard
 
 
-def request_leaderboard(year: int) -> dict[str, DayScores]:
+def request_leaderboard(year: int) -> dict[int, DayScores]:
     leaderboard_path = CACHE_DIR / f"leaderboard{year}.html"
     if leaderboard_path.exists():
         leaderboard = parse_leaderboard(leaderboard_path)
@@ -278,23 +329,19 @@ def generate_day_tile_image(day: str, year: str, languages: list[str], day_score
     return path
 
 
-def handle_day(day: int, year: int, day_path: Path, html: HTML, day_scores: DayScores | None):
+def handle_day(day: int, year: int, solutions: list[str], html: HTML, day_scores: DayScores | None):
     languages = []
-    solution_file_path = None
-    if day_path is not None:
-        for file_path in day_path.glob("*"):
-            if file_path.is_file():
-                if file_path.suffix.lower() in extension_to_color:
-                    if solution_file_path is None:
-                        solution_file_path = file_path.relative_to(AOC_DIR)
-                    languages.append(file_path.suffix.lower())
-    languages = sorted(set(languages))
+    for solution in solutions:
+        extension = "." + solution.split(".")[-1]
+        if extension in extension_to_color and extension not in languages:
+            languages.append(extension)
+    solution_link = solutions[0] if solutions else None
     if DEBUG:
         if day == 25:
             languages = []
     day_graphic_path = generate_day_tile_image(f"{day:02}", f"{year:04}", languages, day_scores)
     day_graphic_path = day_graphic_path.relative_to(AOC_DIR)
-    with html.tag("a", href=str(solution_file_path)):
+    with html.tag("a", href=str(solution_link)):
         html.tag("img", closing=False, src=str(day_graphic_path), width=TILE_WIDTH_PX)
 
 
@@ -302,25 +349,28 @@ def find_first_number(string: str) -> int:
     return int(re.findall(r"\d+", string)[0])
 
 
-def handle_year(year_path: Path, year: int):
+def fill_empty_days_in_dict(day_to_solutions: dict[int, list[str]], max_day) -> None:
+    if not CREATE_ALL_DAYS and len(day_to_solutions) == 0:
+        print(f"Current year has no solutions!")
+    for day in range(1, max_day + 1):
+        if day not in day_to_solutions:
+            day_to_solutions[day] = []
+
+
+def handle_year(year: int, day_to_solutions: dict[int, list[str]]):
     leaderboard = request_leaderboard(year)
     if DEBUG:
-        leaderboard["25"] = None
-        leaderboard["24"] = DayScores("22:22:22", "12313", "0")
+        leaderboard[25] = None
+        leaderboard[24] = DayScores("22:22:22", "12313", "0")
+        day_to_solutions[23] = []
     html = HTML()
     with html.tag("h1", align="center"):
         stars = sum((ds.time1 is not None) + (ds.time2 is not None) for ds in leaderboard.values() if ds is not None)
         html.push(f"{year} - {stars} ⭐")
-    days_with_filled_gaps = {find_first_number(p.name): p for p in get_paths_matching_regex(year_path, DAY_PATTERN)}
-    if not CREATE_ALL_DAYS and len(days_with_filled_gaps) == 0:
-        print(f"Year {year} is empty!")
-        return
-    max_day = 25 if CREATE_ALL_DAYS else max(*days_with_filled_gaps, *map(int, leaderboard))
-    for day in range(1, max_day + 1):
-        if day not in days_with_filled_gaps:
-            days_with_filled_gaps[day] = None
-    for day, day_path in days_with_filled_gaps.items():
-        handle_day(day, year, day_path, html, leaderboard.get(str(day), None))
+    max_day = 25 if CREATE_ALL_DAYS else max(*day_to_solutions, *leaderboard)
+    fill_empty_days_in_dict(day_to_solutions, max_day)
+    for day, solutions in day_to_solutions.items():
+        handle_day(day, year, solutions, html, leaderboard.get(day, None))
 
     with open(README_PATH, "r") as file:
         text = file.read()
@@ -334,10 +384,9 @@ def handle_year(year_path: Path, year: int):
 
 
 def main():
-    for year_path in sorted(get_paths_matching_regex(AOC_DIR, YEAR_PATTERN), reverse=True):
-        year = find_first_number(year_path.name)
+    for year, day_to_solutions_list in get_solution_paths_dict_for_years().items():
         print(f"=== Generating table for year {year} ===")
-        handle_year(year_path, year)
+        handle_year(year, day_to_solutions_list)
 
 
 if __name__ == "__main__":

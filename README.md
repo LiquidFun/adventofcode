@@ -6,7 +6,7 @@
 <h1 align="center">
   2022 - 2 ⭐
 </h1>
-<a href="2022/01/01.py">
+<a href="2022/01/01.kt">
   <img src="Media/2022/01.png" width="161px">
 </a>
 <h1 align="center">
@@ -75,13 +75,13 @@
 <a href="2021/21/21.jl">
   <img src="Media/2021/21.png" width="161px">
 </a>
-<a href="2021/22/part1.jl">
+<a href="2021/22/22.jl">
   <img src="Media/2021/22.png" width="161px">
 </a>
 <a href="2021/23/23.jl">
   <img src="Media/2021/23.png" width="161px">
 </a>
-<a href="2021/24/24makecpp.jl">
+<a href="2021/24/24.cpp">
   <img src="Media/2021/24.png" width="161px">
 </a>
 <a href="2021/25/25.jl">

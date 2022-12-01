@@ -19,9 +19,10 @@ Copy this entire folder into your AoC repository. Then install the requirements.
 
 ### Requirements
 
-Install at least Python 3.9.
+Install at least Python 3.10 (because of the new typing union `|`, if you cannot do so you can
+change the `type1 | type2` annotations to `Union[type1, type2]`).
 
-Install requirements:
+Install the requirements (`pillow` for creating images, `requests` for the leaderboard data and `pyyaml` to parse the language config):
 
 ```
 pip install -r requirements.txt
@@ -33,6 +34,10 @@ To use this script, you need to have a file named "session.cookie" in the same f
 It should contain a single line, the "session" cookie
 when logged in to https://adventofcode.com. Just
 paste it in there.
+
+Now add `<!-- AOC TILES BEGIN -->` and  `<!-- AOC TILES END -->` in your README, everything between these 2 tags
+will always be replaced by the script, so do not add additional information there. Note that these are HTML comments, 
+so they will not be visible in the rendered README.
 
 Your year/day script structure likely looks different. You can change the patterns for years and days in the 
 [create_aoc_tiles.py](create_aoc_tiles.py) file.
