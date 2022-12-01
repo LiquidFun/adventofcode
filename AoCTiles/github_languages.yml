@@ -2073,16 +2073,17 @@ GAP:
   tm_scope: source.gap
   ace_mode: text
   language_id: 119
-GCC Machine Description:
-  type: programming
-  color: "#FFCFAB"
-  extensions:
-  - ".md"
-  tm_scope: source.lisp
-  ace_mode: lisp
-  codemirror_mode: commonlisp
-  codemirror_mime_type: text/x-common-lisp
-  language_id: 121
+# Collides with markdown, so commented out until someone actually needs it
+#GCC Machine Description:
+#  type: programming
+#  color: "#FFCFAB"
+#  extensions:
+#  - ".md"
+#  tm_scope: source.lisp
+#  ace_mode: lisp
+#  codemirror_mode: commonlisp
+#  codemirror_mime_type: text/x-common-lisp
+#  language_id: 121
 GDB:
   type: programming
   extensions:
