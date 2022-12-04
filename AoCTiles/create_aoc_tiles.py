@@ -198,7 +198,7 @@ def request_leaderboard(year: int) -> dict[int, DayScores]:
             return leaderboard
     with open(SESSION_COOKIE_PATH) as cookie_file:
         session_cookie = cookie_file.read().strip()
-        data = requests.get(PERSONAL_LEADERBOARD_URL.format(year=year), cookies={"session": session_cookie}).text
+        data = requests.get(PERSONAL_LEADERBOARD_URL.format(year=year), headers={"User-Agent": "https://github.com/LiquidFun/adventofcode by Brutenis Gliwa"}, cookies={"session": session_cookie}).text
         leaderboard_path.parent.mkdir(exist_ok=True, parents=True)
         with open(leaderboard_path, "w") as file:
             file.write(data)
