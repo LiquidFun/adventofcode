@@ -18,6 +18,7 @@ Then run the script:
 import functools
 import itertools
 import math
+import time
 from collections import namedtuple
 from functools import cache
 from pathlib import Path
@@ -193,8 +194,13 @@ def request_leaderboard(year: int) -> dict[int, DayScores]:
     leaderboard_path = CACHE_DIR / f"leaderboard{year}.html"
     if leaderboard_path.exists():
         leaderboard = parse_leaderboard(leaderboard_path)
+        less_than_30mins = time.time() - leaderboard_path.lstat().st_mtime < 60 * 30
+        if less_than_30mins:
+            print(f"Leaderboard for {year} is younger than 30 minutes, skipping download in order to avoid DDOS.")
+            return leaderboard
         has_no_none_values = all(itertools.chain(map(list, leaderboard.values())))
-        if has_no_none_values:
+        if has_no_none_values and len(leaderboard) == 25:
+            print(f"Leaderboard for {year} is complete, no need to download.")
             return leaderboard
     with open(SESSION_COOKIE_PATH) as cookie_file:
         session_cookie = cookie_file.read().strip()
