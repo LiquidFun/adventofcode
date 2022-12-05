@@ -172,7 +172,7 @@ def get_paths_matching_regex(path: Path, pattern: str):
 
 def find_recursive_solution_files(directory: Path) -> list[Path]:
     solution_paths = []
-    for path in directory.rglob('*'):
+    for path in directory.rglob("*"):
         if path.is_file() and path.suffix in extension_to_color:
             solution_paths.append(path)
     return solution_paths
@@ -194,8 +194,7 @@ def parse_leaderboard(leaderboard_path: Path) -> dict[int, DayScores]:
             day, *scores = re.split(r"\s+", line.strip())
             # replace "-" with None to be able to handle the data later, like if no score existed for the day
             scores = [s if s != "-" else None for s in scores]
-            assert len(scores) in (
-                3, 6), f"Number scores for {day=} ({scores}) are not 3 or 6."
+            assert len(scores) in (3, 6), f"Number scores for {day=} ({scores}) are not 3 or 6."
             leaderboard[int(day)] = DayScores(*scores)
         return leaderboard
 
@@ -214,7 +213,11 @@ def request_leaderboard(year: int) -> dict[int, DayScores]:
             return leaderboard
     with open(SESSION_COOKIE_PATH) as cookie_file:
         session_cookie = cookie_file.read().strip()
-        data = requests.get(PERSONAL_LEADERBOARD_URL.format(year=year), headers={"User-Agent": "https://github.com/LiquidFun/adventofcode by Brutenis Gliwa"}, cookies={"session": session_cookie}).text
+        data = requests.get(
+            PERSONAL_LEADERBOARD_URL.format(year=year),
+            headers={"User-Agent": "https://github.com/LiquidFun/adventofcode by Brutenis Gliwa"},
+            cookies={"session": session_cookie},
+        ).text
         leaderboard_path.parent.mkdir(exist_ok=True, parents=True)
         with open(leaderboard_path, "w") as file:
             file.write(data)
@@ -259,9 +262,11 @@ class HTML:
 def darker_color(c: tuple[int, int, int, int]) -> tuple[int, int, int, int]:
     return c[0] - 10, c[1] - 10, c[2] - 10, 255
 
+
 # Luminance of color
 def luminance(color):
-    return (0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2])
+    return 0.299 * color[0] + 0.587 * color[1] + 0.114 * color[2]
+
 
 # How similar is color_a to color_b
 def color_similarity(color_a, color_b, threshold):
