@@ -31,9 +31,8 @@ pip install -r requirements.txt
 ### Configuration
 
 To use this script, you need to have a file named "session.cookie" in the same folder as this script.
-It should contain a single line, the "session" cookie
-when logged in to https://adventofcode.com. Just
-paste it in there.
+It should contain a single line, the "session" cookie without any prefix (just the string of the cookie).
+when logged in to https://adventofcode.com. Just paste it in there.
 
 Now add `<!-- AOC TILES BEGIN -->` and  `<!-- AOC TILES END -->` in your README, everything between these 2 tags
 will always be replaced by the script, so do not add additional information there. Note that these are HTML comments, 
