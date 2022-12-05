@@ -375,7 +375,7 @@ def handle_year(year: int, day_to_solutions: dict[int, list[str]]):
         html.push(f"{year} - {stars} ⭐")
     max_day = 25 if CREATE_ALL_DAYS else max(*day_to_solutions, *leaderboard)
     fill_empty_days_in_dict(day_to_solutions, max_day)
-    for day, solutions in day_to_solutions.items():
+    for day, solutions in sorted(day_to_solutions.items()):
         handle_day(day, year, solutions, html, leaderboard.get(day, None))
 
     with open(README_PATH, "r") as file:
