@@ -6,3 +6,4 @@ session.cookie
 AoCTiles/.aoc_tiles_cache
 *.class
 META-INF
+*.jar
