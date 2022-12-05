@@ -40,7 +40,7 @@ IMAGE_DIR = AOC_DIR / "Media"
 # Path to the README file where the tiles should be added
 README_PATH = AOC_DIR / "README.md"
 
-# Path to the README file where the tiles should be added
+# Path to the cookie session file
 SESSION_COOKIE_PATH = AOC_DIR / "session.cookie"
 
 # Whether the graphic should be created for days that have not been completed yet. Note that missing days between
