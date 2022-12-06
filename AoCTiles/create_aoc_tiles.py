@@ -370,7 +370,7 @@ def generate_day_tile_image(day: str, year: str, languages: list[str], day_score
     image.save(path)
 
 
-def handle_day(day: int, year: int, solutions: list[str], html: HTML, day_scores: DayScores | None, previously_completed: bool):
+def handle_day(day: int, year: int, solutions: list[str], html: HTML, day_scores: DayScores | None, needs_update: bool):
     languages = []
     for solution in solutions:
         extension = "." + solution.split(".")[-1]
@@ -382,7 +382,7 @@ def handle_day(day: int, year: int, solutions: list[str], html: HTML, day_scores
             languages = []
     day_graphic_path = IMAGE_DIR / f"{year:04}/{day:02}.png"
     day_graphic_path.parent.mkdir(parents=True, exist_ok=True)
-    if not (previously_completed and day_graphic_path.exists()):
+    if not day_graphic_path.exists() or needs_update:
         generate_day_tile_image(f"{day:02}", f"{year:04}", languages, day_scores, day_graphic_path)
     day_graphic_path = day_graphic_path.relative_to(AOC_DIR)
     with html.tag("a", href=str(solution_link)):
@@ -414,17 +414,18 @@ def handle_year(year: int, day_to_solutions: dict[int, list[str]]):
     max_day = 25 if CREATE_ALL_DAYS else max(*day_to_solutions, *leaderboard)
     fill_empty_days_in_dict(day_to_solutions, max_day)
 
-    completed_days = list()
+    completed_solutions = dict()
     completed_cache_path = CACHE_DIR / f"completed-{year}.json"
     if completed_cache_path.exists():
         with open(completed_cache_path, "r") as file:
-            completed_days = json.load(file)
+            completed_solutions = {int(day): solutions for day, solutions in json.load(file).items()}
 
     for day, solutions in sorted(day_to_solutions.items()):
-        handle_day(day, year, solutions, html, leaderboard.get(day, None), day in completed_days)
+        handle_day(day, year, solutions, html, leaderboard.get(day), completed_solutions.get(day) != solutions)
 
     with open(completed_cache_path, "w") as file:
-        file.write(json.dumps([day for day, scores in leaderboard.items() if scores.time2 is not None]))
+        completed_days = [day for day, scores in leaderboard.items() if scores.time2 is not None]
+        file.write(json.dumps({day: solutions for day, solutions in day_to_solutions.items() if day in completed_days}))
 
     with open(README_PATH, "r") as file:
         text = file.read()
