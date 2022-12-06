@@ -23,6 +23,7 @@ from collections import namedtuple
 from functools import cache
 from pathlib import Path
 import re
+import json
 from typing import Literal
 
 import requests
@@ -313,7 +314,7 @@ def draw_star(drawer: ImageDraw, at: tuple[int, int], size=9, color="#ffff0022",
     drawer.polygon(points, fill=color)
 
 
-def generate_day_tile_image(day: str, year: str, languages: list[str], day_scores: DayScores | None) -> Path:
+def generate_day_tile_image(day: str, year: str, languages: list[str], day_scores: DayScores | None, path: Path):
     """Saves a graphic for a given day and year. Returns the path to it."""
     image = get_alternating_background(languages, not (day_scores is None or day_scores.time2 is None))
     drawer = ImageDraw(image)
@@ -366,13 +367,10 @@ def generate_day_tile_image(day: str, year: str, languages: list[str], day_score
     drawer.line((100, 5, 100, 95), fill=font_color, width=1)
     drawer.line((105, 50, 195, 50), fill=font_color, width=1)
 
-    path = IMAGE_DIR / f"{year}/{day}.png"
-    path.parent.mkdir(parents=True, exist_ok=True)
     image.save(path)
-    return path
 
 
-def handle_day(day: int, year: int, solutions: list[str], html: HTML, day_scores: DayScores | None):
+def handle_day(day: int, year: int, solutions: list[str], html: HTML, day_scores: DayScores | None, previously_completed: bool):
     languages = []
     for solution in solutions:
         extension = "." + solution.split(".")[-1]
@@ -382,7 +380,10 @@ def handle_day(day: int, year: int, solutions: list[str], html: HTML, day_scores
     if DEBUG:
         if day == 25:
             languages = []
-    day_graphic_path = generate_day_tile_image(f"{day:02}", f"{year:04}", languages, day_scores)
+    day_graphic_path = IMAGE_DIR / f"{year:04}/{day:02}.png"
+    day_graphic_path.parent.mkdir(parents=True, exist_ok=True)
+    if not (previously_completed and day_graphic_path.exists()):
+        generate_day_tile_image(f"{day:02}", f"{year:04}", languages, day_scores, day_graphic_path)
     day_graphic_path = day_graphic_path.relative_to(AOC_DIR)
     with html.tag("a", href=str(solution_link)):
         html.tag("img", closing=False, src=str(day_graphic_path), width=TILE_WIDTH_PX)
@@ -412,8 +413,18 @@ def handle_year(year: int, day_to_solutions: dict[int, list[str]]):
         html.push(f"{year} - {stars} ⭐")
     max_day = 25 if CREATE_ALL_DAYS else max(*day_to_solutions, *leaderboard)
     fill_empty_days_in_dict(day_to_solutions, max_day)
+
+    completed_days = list()
+    completed_cache_path = CACHE_DIR / f"completed-{year}.json"
+    if completed_cache_path.exists():
+        with open(completed_cache_path, "r") as file:
+            completed_days = json.load(file)
+
     for day, solutions in sorted(day_to_solutions.items()):
-        handle_day(day, year, solutions, html, leaderboard.get(day, None))
+        handle_day(day, year, solutions, html, leaderboard.get(day, None), day in completed_days)
+
+    with open(completed_cache_path, "w") as file:
+        file.write(json.dumps([day for day, scores in leaderboard.items() if scores.time2 is not None]))
 
     with open(README_PATH, "r") as file:
         text = file.read()
