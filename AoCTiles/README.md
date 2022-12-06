@@ -7,9 +7,6 @@ A tile is an image which represents both parts of a day, it looks like this:
 
 It uses the personal [AoC Leaderboard](https://adventofcode.com/2021/leaderboard/self) to get the data for each day using your cookie. 
 
-Set the `SHOW_CHECKMARK_INSTEAD_OF_TIME_RANK` flag to True to get this instead:
-
-![AoC Tiles Checkmark](examples/checkmarks.png)
 
 ## Installation
 
@@ -31,8 +28,8 @@ pip install -r requirements.txt
 ### Configuration
 
 To use this script, you need to have a file named "session.cookie" in the same folder as this script.
-It should contain a single line, the "session" cookie without any prefix (just the string of the cookie).
-when logged in to https://adventofcode.com. Just paste it in there.
+It should contain a single line, the "session" cookie from https://adventofcode.com when you are logged in. 
+No prefix is needed, only the string of length 128.
 
 Now add `<!-- AOC TILES BEGIN -->` and  `<!-- AOC TILES END -->` in your README, everything between these 2 tags
 will always be replaced by the script, so do not add additional information there. Note that these are HTML comments, 
@@ -52,3 +49,23 @@ python3 create_aoc_tiles.py
 ### Pre-commit hook
 
 Add [.pre-commit-config.yaml](/.pre-commit-config.yaml) to your repository and run `pre-commit install` to install the hook.
+
+
+## Customization
+
+There are various flags and variables which can be set to change the look of your tiles. Some of them are listed here
+with examples showing how it changes the look.
+
+**Note that in order to regenerate images you have to either delete the images or delete the .aoc-tiles-cache!**
+
+* `SHOW_CHECKMARK_INSTEAD_OF_TIME_RANK`:
+
+| `False` (default)           | `True`                         |
+|---------------------------|--------------------------------|
+| ![](examples/01basic.png) | ![](examples/01checkmarks.png) |
+
+* `CONTRAST_IMPROVEMENT_TYPE`:
+
+| `"outline"` (default)          | `"dark"`                 | `"none"`                 |
+|-----------------------------|--------------------------|--------------------------|
+| ![](examples/05outline.png) | ![](examples/05dark.png) | ![](examples/05none.png) |
