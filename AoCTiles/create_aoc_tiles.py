@@ -103,7 +103,7 @@ def get_solution_paths_dict_for_years() -> dict[int, dict[int, list[str]]]:
 
             solutions = [solution.relative_to(AOC_DIR) for solution in solutions]
 
-            solution_paths_dict[year][day] = [str(s) for s in solutions]
+            solution_paths_dict[year][day] = [s.as_posix() for s in solutions]
     return solution_paths_dict
 
 
@@ -214,6 +214,7 @@ def request_leaderboard(year: int) -> dict[int, DayScores]:
             return leaderboard
     with open(SESSION_COOKIE_PATH) as cookie_file:
         session_cookie = cookie_file.read().strip()
+        assert len(session_cookie) == 128, f"Session cookie is not 128 characters long, make sure to remove the prefix!"
         data = requests.get(
             PERSONAL_LEADERBOARD_URL.format(year=year),
             headers={"User-Agent": "https://github.com/LiquidFun/adventofcode by Brutenis Gliwa"},
@@ -386,7 +387,7 @@ def handle_day(day: int, year: int, solutions: list[str], html: HTML, day_scores
         generate_day_tile_image(f"{day:02}", f"{year:04}", languages, day_scores, day_graphic_path)
     day_graphic_path = day_graphic_path.relative_to(AOC_DIR)
     with html.tag("a", href=str(solution_link)):
-        html.tag("img", closing=False, src=str(day_graphic_path), width=TILE_WIDTH_PX)
+        html.tag("img", closing=False, src=day_graphic_path.as_posix(), width=TILE_WIDTH_PX)
 
 
 def find_first_number(string: str) -> int:
@@ -427,14 +428,16 @@ def handle_year(year: int, day_to_solutions: dict[int, list[str]]):
         completed_days = [day for day, scores in leaderboard.items() if scores.time2 is not None]
         file.write(json.dumps({day: solutions for day, solutions in day_to_solutions.items() if day in completed_days}))
 
-    with open(README_PATH, "r") as file:
+    with open(README_PATH, "r", encoding="utf-8") as file:
         text = file.read()
         begin = "<!-- AOC TILES BEGIN -->"
         end = "<!-- AOC TILES END -->"
+        assert begin in text and end in text, f"Could not find AOC TILES markers '{begin}' and '{end}' in the " \
+                                              f"README.md! Make sure to add them to the README at {README_PATH}."
         pattern = re.compile(rf"{begin}.*{end}", re.DOTALL | re.MULTILINE)
         new_text = pattern.sub(f"{begin}\n{html}\n{end}", text)
 
-    with open(README_PATH, "w") as file:
+    with open(README_PATH, "w", encoding="utf-8") as file:
         file.write(str(new_text))
 
 
