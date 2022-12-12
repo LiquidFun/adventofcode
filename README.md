@@ -39,7 +39,7 @@
 <a href="2022/11/11.kt">
   <img src="Media/2022/11.png" width="161px">
 </a>
-<a href="2022/12/12.py">
+<a href="2022/12/12.kt">
   <img src="Media/2022/12.png" width="161px">
 </a>
 <h1 align="center">
