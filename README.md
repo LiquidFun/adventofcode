@@ -4,7 +4,7 @@
 
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2022 - 32 ⭐
+  2022 - 34 ⭐
 </h1>
 <a href="2022/01/01.kt">
   <img src="Media/2022/01.png" width="161px">
@@ -53,6 +53,9 @@
 </a>
 <a href="2022/16/16.kt">
   <img src="Media/2022/16.png" width="161px">
+</a>
+<a href="2022/17/17.kt">
+  <img src="Media/2022/17.png" width="161px">
 </a>
 <h1 align="center">
   2021 - 50 ⭐
