@@ -39,13 +39,9 @@ fun Tower.simulate(rockCount: Int, multiply: Long = 1L): Tower {
                     cols[x-1] = y
                     break
                 }
-        val mi  = cols.minOrNull()!!
-        for (x in 0..6)
-            cols[x] -= mi
+        cols.minOrNull()!!.run { (0..6).forEach { cols[it] -= this } }
         cols.add(rockIndex % 5)
-        if (cols !in occ)
-            occ[cols] = 0
-        occ[cols] = occ[cols]!! + 1
+        occ[cols] = occ.getOrDefault(cols, 0) + 1
         if (mostCommon != null && cols == mostCommon)
             indicesOfMostCommon.add(rockIndex)
 
@@ -54,17 +50,15 @@ fun Tower.simulate(rockCount: Int, multiply: Long = 1L): Tower {
             dirIndex++
 
             // Left right (dir)
-            var canHappen = true
+            var isLegal = true
             val lastx = stack[0].size-2
             val endy = starty + rock.size
-            for (y in starty..endy) {
-                for (x in 1..lastx) {
-                    if (stack[y][x] == '@') {
-                        canHappen = canHappen && stack[y][x+dir] in ".@"
-                    }
-                }
-            }
-            if (canHappen) {
+            for (y in starty..endy)
+                for (x in 1..lastx)
+                    if (stack[y][x] == '@')
+                        isLegal = isLegal && stack[y][x+dir] in ".@"
+
+            if (isLegal) {
                 for (y in starty..endy) {
                     var new = stack[y].joinToString("").replace("@", ".").toMutableList()
                     for (x in 1..lastx) {
@@ -77,15 +71,13 @@ fun Tower.simulate(rockCount: Int, multiply: Long = 1L): Tower {
             }
 
             // Downward
-            canHappen = true
-            for (y in starty..endy) {
-                for (x in 1..lastx) {
-                    if (stack[y][x] == '@') {
-                        canHappen = canHappen && stack[y+1][x] in ".@"
-                    }
-                }
-            }
-            if (canHappen) {
+            isLegal = true
+            for (y in starty..endy)
+                for (x in 1..lastx)
+                    if (stack[y][x] == '@')
+                        isLegal = isLegal && stack[y+1][x] in ".@"
+
+            if (isLegal) {
                 for (y in endy downTo starty+1) {
                     for (x in 1..lastx) {
                         if (stack[y-1][x] == '@') {
@@ -94,8 +86,7 @@ fun Tower.simulate(rockCount: Int, multiply: Long = 1L): Tower {
                         }
                     }
                 }
-            }
-            else {
+            } else {
                 for (y in starty..endy)
                     stack[y] = stack[y].joinToString("").replace("@", "#").toMutableList()
                 while (stack[highestRockIndex-1].contains('#'))
