@@ -4,7 +4,7 @@
 
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2022 - 36 ⭐
+  2022 - 38 ⭐
 </h1>
 <a href="2022/01/01.kt">
   <img src="Media/2022/01.png" width="161px">
@@ -59,6 +59,9 @@
 </a>
 <a href="2022/18/18.kt">
   <img src="Media/2022/18.png" width="161px">
+</a>
+<a href="2022/19/19.kt">
+  <img src="Media/2022/19.png" width="161px">
 </a>
 <h1 align="center">
   2021 - 50 ⭐
@@ -140,6 +143,8 @@
 </a>
 <!-- AOC TILES END -->
 
+*The above tiles are clickable, leading to the solution of the corresponding day.*
+
 
 ---
 
@@ -148,9 +153,18 @@ The graphic above has been created with [AoCTiles/create_aoc_tiles.py](AoCTiles/
 ---
 
 
-All solutions expect the input via `stdin` and print to `stdout`. Each solution always prints part 1 and 2 at the same time on separate lines. In order to test the programs you can pipi the input to the program: `julia 1.jl < input.in`, which is then compared to `input.ans`. Instead of doing this manually, I use my `program-tester.sh` script (see [here](https://github.com/LiquidFun/misc-scripts)), which runs the given program on all `*.in` files in the directory, and tests whether the corresponding `*.ans` file matches the given output. I have mapped that program on `Enter` in vim, which makes testing programs easy. To validate a program manually, type `diff <(julia 1.jl < input.in) input.ans`.
+All of my solutions are self-contained and use no external libraries or util files. I try to golf the solutions a little after getting the stars, while still maintaining some readability. The combination of these factors means they're rather short and generally quite elegant *(except for 2022 day 17)*. The solutions expect the input via `stdin` and print (generally) 2 lines to `stdout` with the answer to part 1 and part 2. Exceptions to this are the solutions which require you to read some letters from ASCII art, in that case the ASCII art is part of the `.ans` file and it is printed by the solution instead of the letters.
 
-Programs are initialized with the `init-day.sh` script. I.e. typing `init-day.sh 10` initializes the 10th day by creating a folder named `10`, downloading the input test case with the `session.cookie`, copying the `dummy.py` file and opening the solution file.
+* **2022**: Using **Kotlin** for the first time. Playing with streams a lot, many days are completed by only using streams. The first 15 days have **Python** solutions as well in order to be able to submit quicker and get better times on the leaderboard.
+* **2021**: Using **Julia** for the first time. Because it supports numpy-like element-wise operations natively this was a great choice for AoC. If I used more Julia it would likely be my go to language for AoC right now.
 
-* 2021: There is a solution for each problem in Julia. Sometimes there is a Python or APL solution as well. I'm trying out Julia for the first time, mostly focusing on short and elegant code. 
+Not part of the repository yet, since these are incomplete and the code is not good (might revisit them later):
+
+* **2020**: Using **Rust** for the first time. Solved 8 days, however I found Rust was too verbose and too safe for AoC.
+* **2019**: First time participating, solved 5 days with **Python**
+
+In order to test the programs you can pipe the input to the program, for example: `julia 1.jl < input.in`. The correct output is saved in the `input.ans`. Instead of doing this manually, I use my `program-tester.sh` script (see [here](https://github.com/LiquidFun/misc-scripts)), which runs the given program on all `*.in` files in the directory, and tests whether the corresponding `*.ans` file matches the given output. I have mapped that program on `Enter` in vim, which makes testing programs easy. 
+
+Programs are initialized with the `init-day.sh` script. I.e. typing `init-day.sh 10` initializes the 10th day by creating a folder named `10` and downloading the input test case with the `session.cookie`.
+
 
