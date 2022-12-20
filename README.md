@@ -4,7 +4,7 @@
 
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2022 - 38 ⭐
+  2022 - 40 ⭐
 </h1>
 <a href="2022/01/01.kt">
   <img src="Media/2022/01.png" width="161px">
@@ -62,6 +62,9 @@
 </a>
 <a href="2022/19/19.kt">
   <img src="Media/2022/19.png" width="161px">
+</a>
+<a href="2022/20/20.kt">
+  <img src="Media/2022/20.png" width="161px">
 </a>
 <h1 align="center">
   2021 - 50 ⭐
@@ -153,7 +156,7 @@ The graphic above has been created with [AoCTiles/create_aoc_tiles.py](AoCTiles/
 ---
 
 
-All of my solutions are self-contained and use no external libraries or util files. I try to golf the solutions a little after getting the stars, while still maintaining some readability. The combination of these factors means they're rather short and generally quite elegant *(except for 2022 day 17)*. The solutions expect the input via `stdin` and print (generally) 2 lines to `stdout` with the answer to part 1 and part 2. Exceptions to this are the solutions which require you to read some letters from ASCII art, in that case the ASCII art is part of the `.ans` file and it is printed by the solution instead of the letters.
+All of my solutions are self-contained and use no external libraries or util files. I try to golf the solutions a little after getting the stars, while still maintaining some readability. The combination of these factors means they're rather short and generally quite elegant. The solutions expect the input via `stdin` and print (generally) 2 lines to `stdout` with the answer to part 1 and part 2. Exceptions to this are the solutions which require you to read some letters from ASCII art, in that case the ASCII art is part of the `.ans` file and it is printed by the solution instead of the letters.
 
 * **2022**: Using **Kotlin** for the first time. Playing with streams a lot, many days are completed by only using streams. The first 15 days have **Python** solutions as well in order to be able to submit quicker and get better times on the leaderboard.
 * **2021**: Using **Julia** for the first time. Because it supports numpy-like element-wise operations natively this was a great choice for AoC. If I used more Julia it would likely be my go to language for AoC right now.
