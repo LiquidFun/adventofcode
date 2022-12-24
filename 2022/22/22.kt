@@ -3,7 +3,7 @@
 // a basic because of an ASCII visualization which has been added. 
 //
 // Set this to true in order to paint a colorful ASCII image (needs ANSI support)
-val visualize = false  
+val visualize = false
 
 // This solution only works for inputs of shape:
 //
@@ -16,6 +16,8 @@ val visualize = false
 //      * it has to be higher than its width 
 //      * the middle column must be filled
 //      * the remaining 2 blocks have to be on opposite sites, one offset to the other by y=2 blocks
+
+val dirs = listOf(0 to 1, 1 to 0, 0 to -1, -1 to 0)
 
 class Painter(field: List<String>) {
     val visField = field.map { it.toMutableList() }
@@ -60,17 +62,12 @@ class Painter(field: List<String>) {
     }
 }
 
-val dirs = listOf(0 to 1, 1 to 0, 0 to -1, -1 to 0)
 
-
-fun main() {
-    val (field, seq) = generateSequence(::readlnOrNull).joinToString("\n")
-        .split("\n\n").map { it.split("\n") }
+fun solve(asCube: Boolean, field: List<String>, seq: List<String>) {
     val painter = Painter(field)
     val instructions = Regex("(\\d+|[RL])").findAll(seq[0]).toList()
     var currDir = 0
     var (cy, cx) = 0 to field[0].indexOfFirst { it == '.' }
-
     painter.paint(true)
     for (instruction in instructions.map { it.value }) {
         if (instruction in "RL") {
@@ -86,7 +83,7 @@ fun main() {
 
             val yIsShorter = field.size < field[0].length
             val alongShortAxis = (dirs[currDir].first != 0 && yIsShorter) || (dirs[currDir].second != 0 && !yIsShorter)
-            if (ny3 !in field.indices || nx3 !in field[0].indices) {
+            if (asCube && (ny3 !in field.indices || nx3 !in field[0].indices)) {
                 if (!yIsShorter && alongShortAxis) {
                     dir3 = (dir3 + 2).mod(4)
                     ny3 = (50*2 + ny3 - ny3 % 50 + (49 - ny3 % 50)).mod(field.size)
@@ -105,9 +102,10 @@ fun main() {
                 var nyx2p: MutableList<Pair<Int, Int>> = mutableListOf()
                 var nyx3p: MutableList<Pair<Int, Int>> = mutableListOf()
                 painter.add(ny3, nx3, '?')
+                val moveStraight = !asCube || alongShortAxis && (cy in 0..49 || cy in 100..149)
                 while (field[ny][nx] == ' ' && field[ny2][nx2] == ' ') {
                     // If there is an adjacent block go diagonally
-                    if (!(alongShortAxis && (cy in 0..49 || cy in 100..149))) {
+                    if (!moveStraight) {
                         ny = (ny + dirs[(currDir+1).mod(4)].first).mod(field.size)
                         nx = (nx + dirs[(currDir+1).mod(4)].second).mod(field[cy].length)
                         ny2 = (ny2 + dirs[(currDir-1).mod(4)].first).mod(field.size)
@@ -116,7 +114,7 @@ fun main() {
 
                     if (field[ny][nx] != ' ' || field[ny2][nx2] != ' ' || field[ny3][nx3] != ' ')
                         break
-                    if (alongShortAxis && (cy in 0..49 || cy in 100..149)) {
+                    if (moveStraight) {
                         ny3 = ny3 + dirs[dir3].first
                         nx3 = nx3 + dirs[dir3].second
                     }
@@ -127,7 +125,7 @@ fun main() {
                         nx2 = (nx2 + dirs[currDir].second).mod(field[cy].length)
                     }
 
-                    if (ny3 !in field.indices || nx3 !in field[0].indices) {
+                    if (asCube && (ny3 !in field.indices || nx3 !in field[0].indices)) {
                         if (!yIsShorter && alongShortAxis) {
                             dir3 = (dir3 + 2).mod(4)
                             ny3 = (100 + ny3 - ny3 % 50 + (49 - ny3 % 50)).mod(field.size)
@@ -156,11 +154,11 @@ fun main() {
                     ny = ny3
                     nx = nx3
                     nyxp = nyx3p
-                    if (field[ny][nx] != '#') 
+                    if (asCube && field[ny][nx] != '#') 
                         currDir = (currDir+2).mod(4)
                 }
-                for ((ny, nx) in nyxp) {
-                    painter.add(ny, nx, if (currDir % 2 == 0) '\\' else '/')
+                for ((nyp, nxp) in nyxp) {
+                    painter.add(nyp, nxp, if (currDir % 2 == 0) '\\' else '/')
                     painter.paint()
                 }
             }
@@ -175,4 +173,25 @@ fun main() {
     }
     painter.paint()
     println(1000 * (cy+1) + 4 * (cx+1) + currDir)
+}
+
+
+
+fun main() {
+    var (field, seq) = generateSequence(::readlnOrNull).joinToString("\n").split("\n\n").map { it.split("\n") }
+
+    // Part 1
+    solve(asCube=false, field, seq)
+
+    // Part 2
+    val cube = field.map { it.toMutableList() }
+    // Rotate last face of cube in input to make it easier
+    for (y in 0..49) {
+        for (x in 0..49) {
+            cube[199-x][50+y] = cube[150+y][x]
+            cube[150+y][x] = ' '
+        }
+    }
+    field = cube.map { it.joinToString("") }
+    solve(asCube=true, field, seq)
 }
