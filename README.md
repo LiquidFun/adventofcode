@@ -159,6 +159,33 @@
 <a href="2021/25/25.jl">
   <img src="Media/2021/25.png" width="161px">
 </a>
+<h1 align="center">
+  2020 - 16 ⭐
+</h1>
+<a href="2020/01/01.rs">
+  <img src="Media/2020/01.png" width="161px">
+</a>
+<a href="None">
+  <img src="Media/2020/02.png" width="161px">
+</a>
+<a href="None">
+  <img src="Media/2020/03.png" width="161px">
+</a>
+<a href="None">
+  <img src="Media/2020/04.png" width="161px">
+</a>
+<a href="None">
+  <img src="Media/2020/05.png" width="161px">
+</a>
+<a href="None">
+  <img src="Media/2020/06.png" width="161px">
+</a>
+<a href="None">
+  <img src="Media/2020/07.png" width="161px">
+</a>
+<a href="None">
+  <img src="Media/2020/08.png" width="161px">
+</a>
 <!-- AOC TILES END -->
 
 *The above tiles are clickable, leading to the solution of the corresponding day.*
