@@ -165,7 +165,7 @@
 <a href="2020/01/01.rs">
   <img src="Media/2020/01.png" width="161px">
 </a>
-<a href="None">
+<a href="2020/02/02.rs">
   <img src="Media/2020/02.png" width="161px">
 </a>
 <a href="None">
