@@ -4,6 +4,12 @@
 
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
+  2023 - 2 ⭐
+</h1>
+<a href="2023/01/01.py">
+  <img src="Media/2023/01.png" width="161px">
+</a>
+<h1 align="center">
   2022 - 50 ⭐
 </h1>
 <a href="2022/01/01.kt">
