@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-year="2022"
+year="2023"
 cookie=$(cat session.cookie)
 input_prefix="input"
 sample_prefix="example"
@@ -19,7 +19,8 @@ if [[ "$1" ]]; then
     if ! [[ -f "$input_file" ]]; then
 	echo "Downloading input for problem $1"
 	# Don't DDOS! So check if file exists already
-	curl "https://adventofcode.com/$year/day/$1/input" --cookie "session=$cookie" > "$input_file"
+	nozero=$(echo "$1" | awk '$0*=1')
+	curl "https://adventofcode.com/$year/day/$nozero/input" --cookie "session=$cookie" > "$input_file"
     fi
 
     # Add empty file so there are not that many lines when showing input instead
