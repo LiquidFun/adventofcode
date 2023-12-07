@@ -7,5 +7,10 @@ AoCTiles/.aoc_tiles_cache
 *.class
 META-INF
 *.jar
-/2020/target/
-/2020/Cargo.lock
+target
+.aoc_tiles/cache
+
+*.in
+*.ans
+
+

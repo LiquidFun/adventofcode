@@ -1,8 +1,7 @@
 repos:
-  - repo: local
+  - repo: https://github.com/LiquidFun/aoc_tiles
+    rev: 0.3.3
     hooks:
-      - id: create-day-tiles
-        name: create-day-tiles
-        entry: python3 AoCTiles/create_aoc_tiles.py
-        language: system
+      - id: aoc-tiles
+        args: ["--what-to-show-on-right-side", "time_and_rank", "--count-as-solved-when", "both", "--language-sorting", "rs,jl,kt,py"]
 
