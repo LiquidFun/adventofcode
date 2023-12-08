@@ -4,7 +4,7 @@
 
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  2023 - 14 ⭐
+  2023 - 16 ⭐
 </h1>
 <a href="2023/01/01.rs">
   <img src=".aoc_tiles/tiles/2023/01.png" width="161px">
@@ -26,6 +26,9 @@
 </a>
 <a href="2023/07/07.py">
   <img src=".aoc_tiles/tiles/2023/07.png" width="161px">
+</a>
+<a href="2023/08/08.py">
+  <img src=".aoc_tiles/tiles/2023/08.png" width="161px">
 </a>
 <h1 align="center">
   2022 - 50 ⭐

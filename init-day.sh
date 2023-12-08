@@ -34,7 +34,7 @@ if [[ "$1" ]]; then
     solution_file="$1.py"
     if ! [[ -f "$solution_file" ]]; then
 	echo "Create dummy python solution $solution_file"
-	cp "../dummy.py" "$solution_file"
+	cp "../../dummy.py" "$solution_file"
     fi
 
 
