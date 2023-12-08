@@ -27,7 +27,7 @@
 <a href="2023/07/07.py">
   <img src=".aoc_tiles/tiles/2023/07.png" width="161px">
 </a>
-<a href="2023/08/08.py">
+<a href="2023/08/08.rs">
   <img src=".aoc_tiles/tiles/2023/08.png" width="161px">
 </a>
 <h1 align="center">
