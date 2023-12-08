@@ -3,5 +3,8 @@ repos:
     rev: 0.3.3
     hooks:
       - id: aoc-tiles
-        args: ["--what-to-show-on-right-side", "time_and_rank", "--count-as-solved-when", "both", "--language-sorting", "rs,jl,kt,py"]
+        args: 
+          - --what-to-show-on-right-side=time_and_rank
+          - --count-as-solved-when=both
+          - --language-sorting=rs,jl,kt,py
 
