@@ -30,7 +30,7 @@
 <a href="2023/08/08.py">
   <img src=".aoc_tiles/tiles/2023/08.png" width="161px">
 </a>
-<a href="2023/09/09.py">
+<a href="2023/09/09.rs">
   <img src=".aoc_tiles/tiles/2023/09.png" width="161px">
 </a>
 <h1 align="center">
