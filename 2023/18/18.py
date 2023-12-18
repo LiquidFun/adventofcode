@@ -1,5 +1,3 @@
-from sys import stdin
-
 dirs = [(0, 1), (1, 0), (0, -1), (-1, 0)]
 
 def solve(instructions, s=0):
@@ -13,6 +11,6 @@ def solve(instructions, s=0):
         s += ys[i] * xs[i-1] - xs[i] * ys[i-1]
     print(s // 2 + 1)
 
-split = [line.split() for line in stdin]
+split = [line.split() for line in open(0)]
 solve([("RDLU".index(d), int(num)) for d, num, _ in split])
 solve([(int(c[-2]), int(c[2:-2], 16)) for *_, c in split])
