@@ -1,43 +1,29 @@
 from sys import stdin
-import re
-from collections import defaultdict, Counter, deque
-from itertools import permutations, combinations
+from functools import cache
 
-lines = stdin.read().strip().split('\n')
-
-def decide(line, curr, needed, cache):
-    tup = line, curr, needed
-    if tup in cache:
-        return cache[tup]
+@cache
+def decide(line, curr, needed, s=0):
     if not line:
         return (needed or (0,)) == (curr,)
 
-    s = 0
-    if line[0] == '?':
-        s += decide('.' + line[1:], curr, needed, cache)
-        s += decide('#' + line[1:], curr, needed, cache)
-
-    if line[0] == '#' and needed and curr < needed[0]:
-        s += decide(line[1:], curr+1, needed, cache)
-
-    if line[0] == '.':
-        if needed and curr == needed[0]:
-            s += decide(line[1:], 0, needed[1:], cache)
-        if not needed or curr == 0:
-            s += decide(line[1:], 0, needed, cache)
-
-    cache[tup] = s
+    match line[0]:
+        case '?':
+            s += decide('.' + line[1:], curr, needed)
+            s += decide('#' + line[1:], curr, needed)
+        case '#' if needed and curr < needed[0]:
+            s += decide(line[1:], curr+1, needed)
+        case '.' if not needed or curr == 0:
+            s += decide(line[1:], 0, needed)
+        case '.' if curr == needed[0]:
+            s += decide(line[1:], 0, needed[1:])
     return s
 
-
 s1 = s2 = 0
-for line in lines:
+for line in stdin:
     chars, needed = line.split()
     needed = tuple(int(n) for n in needed.split(","))
 
-    s1 += decide(chars, 0, needed, {})
-
-    p2 = '?'.join([chars] * 5)
-    s2 += decide(p2, 0, needed * 5, {})
+    s1 += decide(chars, 0, needed)
+    s2 += decide('?'.join([chars] * 5), 0, needed * 5)
 
 print(s1, s2, sep='\n')
