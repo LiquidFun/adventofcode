@@ -1,6 +1,6 @@
 repos:
   - repo: https://github.com/LiquidFun/aoc_tiles
-    rev: 0.5.1
+    rev: 0.5.4
     hooks:
       - id: aoc-tiles
         args: 
