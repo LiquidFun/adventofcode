@@ -250,7 +250,7 @@
 
 ---
 
-The graphic above has been created with [AoCTiles/create_aoc_tiles.py](AoCTiles/create_aoc_tiles.py) script. Feel free to use it in your own repositories. See the [AoCTiles/README.md](AoCTiles/README.md) for instructions on how to use it.
+The graphic above has been created using [aoc_tiles](https://github.com/LiquidFun/aoc_tiles). Feel free to use it, it's easy to set up!
 
 ---
 

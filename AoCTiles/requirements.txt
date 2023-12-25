@@ -1,4 +1,0 @@
-pillow
-requests
-pyyaml
-pre-commit
