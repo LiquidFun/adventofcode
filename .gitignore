@@ -1,6 +1,5 @@
 2021/3/3golfed.py
 *run
-session.cookie
 .apl.history
 .idea
 AoCTiles/.aoc_tiles_cache
@@ -8,9 +7,12 @@ AoCTiles/.aoc_tiles_cache
 META-INF
 *.jar
 target
-.aoc_tiles/cache
+session.cookie
 
 *.in
 *.ans
+
+/.aoc_tiles/**/*
+!/.aoc_tiles/tiles/
 
 
