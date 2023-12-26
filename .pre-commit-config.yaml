@@ -1,10 +1,10 @@
 repos:
   - repo: https://github.com/LiquidFun/aoc_tiles
-    rev: 0.5.4
+    rev: 0.5.6
     hooks:
       - id: aoc-tiles
         args: 
           - --language-sorting=jl,kt,py,rs
-          - --exclude-patterns="2021/*/*.apl,2021/*/*.py,2021/*/*.cpp"
+          - --exclude-patterns=2021/*/*.apl,2021/*/*.py,2021/*/*.cpp,2023/*/*.rs
           - --auto-add-tiles-to-git=amend
 
