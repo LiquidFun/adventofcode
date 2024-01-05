@@ -275,8 +275,9 @@ The graphic above has been created using [aoc_tiles](https://github.com/LiquidFu
 ---
 
 
-All of my solutions are self-contained and use no external libraries or util files. I try to golf the solutions a little after getting the stars, while still maintaining some readability. The combination of these factors means they're rather short and generally quite elegant. The solutions expect the input via `stdin` and print (generally) 2 lines to `stdout` with the answer to part 1 and part 2. Exceptions to this are the solutions which require you to read some letters from ASCII art, in that case the ASCII art is part of the `.ans` file and it is printed by the solution instead of the letters.
+All of my solutions are self-contained and use no util files (and mostly no libraries). I try to golf the solutions a little after getting the stars, while still maintaining some readability. The combination of these factors means they're rather short and generally quite elegant (e.g. [2023/18](2023/18/18.py)). The solutions expect the input via `stdin` and print (generally) 2 lines to `stdout` with the answer to part 1 and part 2. Exceptions to this are the solutions which require you to read some letters from ASCII art, in that case the ASCII art is part of the `.ans` file and it is printed by the solution instead of the letters.
 
+* **2023**: Initially I wanted to use Rust for this year, but instead I focused on getting on the leaderboard with **Python** (successfully on day 18 and 25!). In the last days I even started using libraries (Z3/networkx). Python is my strongest language, so no surprises there, I did 5 days in Rust as well, but found it too frustrating and had too little time for 2 solutions per day.
 * **2022**: Using **Kotlin** for the first time. Playing with streams a lot, many days are completed by only using streams. The first 15 days have **Python** solutions as well in order to be able to submit quicker and get better times on the leaderboard.
 * **2021**: Using **Julia** for the first time. Because it supports numpy-like element-wise operations natively this was a great choice for AoC. If I used more Julia it would likely be my go to language for AoC right now.
 
@@ -288,10 +289,4 @@ Not part of the repository yet, since these are incomplete and the code is not g
 In order to test the programs you can pipe the input to the program, for example: `julia 1.jl < input.in`. The correct output is saved in the `input.ans`. Instead of doing this manually, I use my `program-tester.sh` script (see [here](https://github.com/LiquidFun/misc-scripts)), which runs the given program on all `*.in` files in the directory, and tests whether the corresponding `*.ans` file matches the given output. I have mapped that program on `Enter` in vim, which makes testing programs easy. 
 
 Programs are initialized with the `init-day.sh` script. I.e. typing `init-day.sh 10` initializes the 10th day by creating a folder named `10` and downloading the input test case with the `session.cookie`.
-
-
-easy. 
-
-Programs are initialized with the `init-day.sh` script. I.e. typing `init-day.sh 10` initializes the 10th day by creating a folder named `10` and downloading the input test case with the `session.cookie`.
-
 
