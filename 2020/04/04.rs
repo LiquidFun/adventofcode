@@ -19,12 +19,10 @@ fn valid_p2(map: &HashMap<&str, &str>) -> bool {
 }
 
 fn main() {
-    let input = stdin().lines().filter_map(Result::ok).join("\n");
+    let input = stdin().lines().filter_map(Result::ok).join(" ");
     let passports: Vec<HashMap<&str, &str>> = input
-        .split(|c| "\n ".contains(c))
-        .collect_vec()
-        .split(|&l| l.is_empty())
-        .map(|line| line.iter().map(|e| e.split_once(":").unwrap()).collect())
+        .split("  ")
+        .map(|line| line.split(" ").map(|e| e.split_once(":").unwrap()).collect())
         .collect();
     println!("{}", passports.iter().filter(|h| valid_p1(h)).count());
     println!("{}", passports.iter().filter(|h| valid_p2(h)).count());
