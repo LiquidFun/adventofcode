@@ -260,7 +260,7 @@
 <a href="2020/07/07.rs">
   <img src=".aoc_tiles/tiles/2020/07.png" width="161px">
 </a>
-<a href="None">
+<a href="2020/08/08.rs">
   <img src=".aoc_tiles/tiles/2020/08.png" width="161px">
 </a>
 <!-- AOC TILES END -->
