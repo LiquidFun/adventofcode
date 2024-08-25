@@ -8,6 +8,7 @@ edition = "2021"
 [dependencies]
 regex = "1.10.2"
 itertools = "0.12.0"
+hopcroft-karp = "0.2.1"
 
 [[bin]]
 name = "01"

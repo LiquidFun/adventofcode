@@ -1,6 +1,6 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  Advent of Code - 180/450 ⭐
+  Advent of Code - 182/450 ⭐
 </h1>
 <h1 align="center">
   2023 - 50 ⭐
@@ -237,7 +237,7 @@
   <img src=".aoc_tiles/tiles/2021/25.png" width="161px">
 </a>
 <h1 align="center">
-  2020 - 30 ⭐
+  2020 - 32 ⭐
 </h1>
 <a href="2020/01/01.rs">
   <img src=".aoc_tiles/tiles/2020/01.png" width="161px">
@@ -283,6 +283,9 @@
 </a>
 <a href="2020/15/15.rs">
   <img src=".aoc_tiles/tiles/2020/15.png" width="161px">
+</a>
+<a href="2020/16/16.rs">
+  <img src=".aoc_tiles/tiles/2020/16.png" width="161px">
 </a>
 <!-- AOC TILES END -->
 
