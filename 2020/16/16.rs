@@ -13,14 +13,14 @@ fn main() {
     let ranges = input
         .get(0)
         .unwrap()
-        .split("\n")
+        .lines()
         .map(|line| {
             pattern
                 .find_iter(line)
                 .map(|a| a.as_str().parse::<usize>().unwrap())
-                .tuple_windows()
-                .exactly_one()
+                .tuples()
                 .map(|(a, b, c, d)| (a..=b, c..=d))
+                .next()
                 .unwrap()
         })
         .collect_vec();
@@ -54,19 +54,15 @@ fn main() {
     }
     println!("{:?}", sum);
 
-    let departure_indices = matching(&allowed.clone().into_iter().collect_vec())
+    let mine = pattern.find_iter(input.get(1).unwrap())
+        .map(|a| a.as_str().parse::<usize>().unwrap())
+        .collect_vec();
+
+    matching(&allowed.into_iter().collect_vec())
         .iter()
         .sorted()
         .take(6)
-        .map(|(_, b)| b - 20)
-        .collect_vec();
-
-    pattern
-        .find_iter(input.get(1).unwrap())
-        .map(|a| a.as_str().parse::<usize>().unwrap())
-        .enumerate()
-        .filter(|(i, _)| departure_indices.contains(i))
-        .map(|a| a.1)
-        .reduce(|a, b| a * b)
+        .map(|(_, b)| mine[b - 20])
+        .reduce(|acc, x| acc * x)
         .map(|a| println!("{:?}", a));
 }
