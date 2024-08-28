@@ -1,9 +1,9 @@
-use std::{collections::HashMap, io::stdin};
+use std::io::stdin;
 
 fn eval(line: &str, plus_precedence: i32) -> i64 {
     let mut nums = Vec::new();
     let mut operators = Vec::new();
-    let precedence = HashMap::from([('(', 0), (')', 0), ('+', plus_precedence), ('*', 1)]);
+    let precedence = |c| match c { '+' => plus_precedence, '*' => 1, _ => 0 };
 
     for c in line.chars().chain(")".chars()) {
         match c {
@@ -12,11 +12,11 @@ fn eval(line: &str, plus_precedence: i32) -> i64 {
                 while !operators.is_empty() && c != '(' {
                     let op = operators.pop().unwrap();
                     if op == '(' && c == ')'  { break }
-                    if precedence.get(&op).unwrap() < precedence.get(&c).unwrap() {
+                    if precedence(op) < precedence(c) {
                         operators.push(op);
                         break;
                     }
-                    let func = if op == '*' { |(a, b)| a * b } else { |(a, b)| a + b };
+                    let func = match op { '*' => |(a, b)| a * b, _ => |(a, b)| a + b };
                     let value = nums.pop().zip(nums.pop()).map(func).unwrap();
                     nums.push(value);
                 }
@@ -30,6 +30,6 @@ fn eval(line: &str, plus_precedence: i32) -> i64 {
 
 fn main() {
     let lines: Vec<String> = stdin() .lines().filter_map(Result::ok).collect();
-    println!("{:?}", lines.iter().map(|l| eval(&l, 1)).sum::<i64>()); 
-    println!("{:?}", lines.iter().map(|l| eval(&l, 2)).sum::<i64>()); 
+    println!("{}", lines.iter().map(|l| eval(&l, 1)).sum::<i64>()); 
+    println!("{}", lines.iter().map(|l| eval(&l, 2)).sum::<i64>()); 
 }
