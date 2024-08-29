@@ -6,7 +6,7 @@ use regex::Regex;
 fn resolve(
     curr: &str,
     rules: &HashMap<String, Vec<Vec<String>>>,
-    resolved: &mut HashMap<String, String>
+    resolved: &mut HashMap<String, String>,
 ) -> String {
     if let Some(value) = resolved.get(curr) {
         return value.to_string();
@@ -24,6 +24,7 @@ fn resolve(
 
 fn main() {
     let lines = stdin().lines().filter_map(Result::ok).join("\n");
+
     let (rules_str, messages) = lines.split("\n\n").next_tuple().unwrap();
     let mut rules = HashMap::new();
     for rule in rules_str.lines() {
@@ -42,7 +43,12 @@ fn main() {
         .map(|(&ref k, v)| (k.to_owned(), v.trim_matches('"').to_owned()))
         .collect();
 
-    let pattern = resolve("0", &rules, &mut resolved);
-    let regex = Regex::new(&format!("^{pattern}$")).unwrap();
-    println!("{:?}", messages.lines().filter(|line| regex.is_match(line)).count());
+    let p42 = resolve("42", &rules, &mut resolved);
+    let p31 = resolve("31", &rules, &mut resolved);
+    let regex1 = Regex::new(&format!("^{p42}{p42}{p31}$")).unwrap();
+    println!("{}", messages.lines().filter(|l| regex1.is_match(l)).count());
+
+    let pattern2 = (1..6).map(|i| format!("({p42}+{p42}{{{i}}}{p31}{{{i}}})")).join("|");
+    let regex2 = Regex::new(&format!("^({pattern2})$")).unwrap();
+    println!("{}", messages.lines().filter(|l| regex2.is_match(l)).count());
 }
