@@ -1,12 +1,15 @@
-use std::{arch::x86_64, collections::{HashMap, HashSet}, io::stdin};
+use std::{collections::{HashMap, HashSet}, io::stdin};
 
 use itertools::Itertools;
+use regex::Regex;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 struct Tile {
     id: usize,
     rows: Vec<usize>,
 }
+
+
 
 impl Tile {
     fn new(id: usize, lines: Vec<&str>) -> Tile {
@@ -28,7 +31,7 @@ impl Tile {
     fn inner(&self) -> Tile {
         Tile {
             id: self.id,
-            rows: self.rows.iter().skip(1).take(8).map(|n| (n - (n & (1<<10))) >> 2).collect()
+            rows: self.rows.iter().skip(1).take(8).map(|n| (n - (n & (1<<9))) >> 1).collect()
         }
     }
 
@@ -61,6 +64,64 @@ impl Tile {
     fn top_edges(&self) -> HashMap<usize, Tile> {
         self.variations().iter().map(|tile| (tile.top(), tile.clone())).collect()
     }
+}
+
+
+fn solve(corner: &Tile, all_tiles: &Vec<Tile>) -> usize {
+    let size = (0..).find(|i| i*i == all_tiles.len() / 8).unwrap();
+
+    let mut leftmost = corner.clone();
+    let mut used = HashSet::new();
+
+    let mut field: Vec<Vec<char>> = Vec::new();
+
+    for y in 0..size {
+        let mut current = leftmost.clone();
+        if y != 0 {
+            current = all_tiles.iter().filter(|t| !used.contains(&t.id)).find(|tile| tile.top() == leftmost.bot()).unwrap().clone();
+        }
+        leftmost = current.clone();
+        used.insert(current.id);
+        current.inner().rows.iter().for_each(|n| field.push(format!("{n:08b}").chars().collect()));
+        for _ in 1..size {
+            // println!("{:?}", current.right());
+            current = all_tiles.iter().filter(|t| !used.contains(&t.id)).find(|tile| tile.left() == current.right()).unwrap().clone();
+            // println!("{:?}", current.left());
+            used.insert(current.id);
+
+            for (row, num) in current.inner().rows.iter().enumerate() {
+                field.get_mut(y*8+row).unwrap().extend(format!("{num:08b}").chars());
+            }
+        }
+        // field.push("-".repeat(field.get(0).unwrap().len()).chars().collect_vec())
+    }
+    let lines = field.iter().map(|vec| vec.iter().join("")).collect_vec();
+    // lines.iter().map(|v| v.iter().join("")).for_each(|l| println!("{:?}", l));
+                        // "                  # "
+                        // "#    ##    ##    ###"
+                        // " #  #  #  #  #  #   "
+    let dragon1 = Regex::new(r"..................1.").unwrap();
+    let dragon2 = Regex::new(r"1....11....11....111").unwrap();
+    let dragon3 = Regex::new(r".1..1..1..1..1..1...").unwrap();
+    // lines.windows(3).for_each(|w| println!("{:?}", w));
+    let mut dragons = 0;
+    for (a, b, c) in lines.iter().tuple_windows() {
+        for i in 0..a.len() {
+            println!("match {:?}", &a.chars().skip(i).take(20).join(""));
+            if dragon1.is_match(&a.chars().skip(i).take(20).join(""))
+                && dragon2.is_match(&b.chars().skip(i).take(20).join(""))
+                && dragon3.is_match(&c.chars().skip(i).take(20).join("")) {
+                dragons += 15;
+                // println!("match {:?}", &b.iter().skip(i).take(20).join(""));
+                // println!("match {:?}", &c.iter().skip(i).take(20).join(""));
+            }
+        }
+    }
+    // let wins = lines.iter().map(|l| l.chars().collect_vec().windows(20).map(|w| w.iter().join("")).collect_vec()).collect_vec();
+    // for (a, b, c) in wins.iter().tuple_windows() {
+    //     println!("{:?}", a);
+    // }
+    lines.join("").matches("1").count() - dragons
 }
 
 fn main() {
@@ -118,49 +179,10 @@ fn main() {
 
     println!("{:?}", corners.iter().map(|tile| tile.id).unique().reduce(|acc, a| acc * a).unwrap());
 
-    let mut leftmost = *corners.first().unwrap();
-    let size = (0..).find(|i| i*i == tiles.len()).unwrap();
-
-    let mut used = HashSet::new();
-
-    let mut field: Vec<Vec<char>> = Vec::new();
-
-    for y in 0..size {
-        let mut current = leftmost;
-        if y != 0 {
-            current = all_tiles.iter().filter(|t| !used.contains(&t.id)).find(|tile| tile.top() == leftmost.bot()).unwrap();
-        }
-        leftmost = current;
-        used.insert(current.id);
-        current.inner().rows.iter().for_each(|n| field.push(format!("{n:08b}").chars().collect()));
-        for _ in 1..size {
-            println!("{:?}", current.right());
-            current = all_tiles.iter().filter(|t| !used.contains(&t.id)).find(|tile| tile.left() == current.right()).unwrap();
-            println!("{:?}", current.left());
-            used.insert(current.id);
-
-            for (row, num) in current.inner().rows.iter().enumerate() {
-                field.get_mut(y*8+row).unwrap().extend(format!("{num:08b}").chars());
-            }
-        }
-        // field.push("-".repeat(field.get(0).unwrap().len()).chars().collect_vec())
-    }
-    let lines = field.iter().map(|vec| vec.iter().join("")).collect_vec();
-    // lines.iter().map(|v| v.iter().join("")).for_each(|l| println!("{:?}", l));
-    let dragon1 = "00000000000000000010";
-    let dragon2 = "10000110000110000111";
-    let dragon3 = "01001001001001001000";
-    lines.windows(3).for_each(|w| println!("{:?}", w));
-    let mut dragons = 0;
-    for (a, b, c) in lines.windows(3).tuples() {
-        for i in 0..a.len() {
-            if a.iter().skip(i).join("").starts_with(dragon1) 
-                && b.iter().skip(i).join("").starts_with(dragon2)
-                && c.iter().skip(i).join("").starts_with(dragon3) {
-                dragons += 1;
-            }
-        }
-    }
-    println!("{:?}", dragons);
+    println!("{:?}", corners.iter().map(|corner| solve(corner, &all_tiles)).collect_vec());
+    // println!("{:?}", corners.iter().map(|corner| solve(corner, &all_tiles)).sum::<usize>());
+    // 2129 too high
+    // 2005 too low
+    // 1900 too low
     // println!("{:?}", edges.iter().filter(|(_, v)| v.len() == 1).map(|(_, v)| v.iter().next().unwrap()).sorted().collect_vec());
 }
