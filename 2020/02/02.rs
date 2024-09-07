@@ -7,7 +7,7 @@ struct PasswordPhilosophy {
     string: String,
 }
 
-fn get_password_philosophies() -> Vec<PasswordPhilosophy> {
+fn parse_password_philosophies() -> Vec<PasswordPhilosophy> {
     let lines = stdin().lines().filter_map(Result::ok).collect_vec();
     lines.iter()
         .map(|line| line.split(|c| "- :".contains(c)).next_tuple().unwrap())
@@ -22,7 +22,7 @@ fn get_password_philosophies() -> Vec<PasswordPhilosophy> {
 }
 
 fn main() {
-    let philosophies = get_password_philosophies();
+    let philosophies = parse_password_philosophies();
     println!("{}", philosophies.iter().filter(|p| p.range.contains(&p.string.matches(p.letter).count())).count());
 
     let sum2 = philosophies
