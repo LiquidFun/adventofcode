@@ -1,9 +1,9 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  Advent of Code - 200/450 ⭐
+  Advent of Code - 210/450 ⭐
 </h1>
 <h1 align="center">
-  2023 - 50 ⭐
+  2023 - 50 ⭐ - Python
 </h1>
 <a href="2023/01/01.py">
   <img src=".aoc_tiles/tiles/2023/01.png" width="161px">
@@ -81,7 +81,7 @@
   <img src=".aoc_tiles/tiles/2023/25.png" width="161px">
 </a>
 <h1 align="center">
-  2022 - 50 ⭐
+  2022 - 50 ⭐ - Kotlin
 </h1>
 <a href="2022/01/01.kt">
   <img src=".aoc_tiles/tiles/2022/01.png" width="161px">
@@ -159,7 +159,7 @@
   <img src=".aoc_tiles/tiles/2022/25.png" width="161px">
 </a>
 <h1 align="center">
-  2021 - 50 ⭐
+  2021 - 50 ⭐ - Julia
 </h1>
 <a href="2021/01/1.jl">
   <img src=".aoc_tiles/tiles/2021/01.png" width="161px">
@@ -237,7 +237,7 @@
   <img src=".aoc_tiles/tiles/2021/25.png" width="161px">
 </a>
 <h1 align="center">
-  2020 - 50 ⭐
+  2020 - 50 ⭐ - Rust
 </h1>
 <a href="2020/01/01.rs">
   <img src=".aoc_tiles/tiles/2020/01.png" width="161px">
@@ -314,6 +314,24 @@
 <a href="2020/25/25.rs">
   <img src=".aoc_tiles/tiles/2020/25.png" width="161px">
 </a>
+<h1 align="center">
+  2019 - 10 ⭐ - OCaml
+</h1>
+<a href="2019/01/01.ml">
+  <img src=".aoc_tiles/tiles/2019/01.png" width="161px">
+</a>
+<a href="None">
+  <img src=".aoc_tiles/tiles/2019/02.png" width="161px">
+</a>
+<a href="None">
+  <img src=".aoc_tiles/tiles/2019/03.png" width="161px">
+</a>
+<a href="None">
+  <img src=".aoc_tiles/tiles/2019/04.png" width="161px">
+</a>
+<a href="None">
+  <img src=".aoc_tiles/tiles/2019/05.png" width="161px">
+</a>
 <!-- AOC TILES END -->
 
 *The above tiles are clickable, leading to the solution of the corresponding day.*
@@ -353,6 +371,7 @@ Not part of the repository yet, since these are incomplete and the code is not g
 * 2022: `kotlinc 01.kt -include-runtime -d 01.jar && kotlin 01.jar < example.in` (or use intellij, kotlinc is very slow via CLI, 5+ seconds to compile)
 * 2021: `julia 1.jl < input.in`
 * 2020: `cargo run --release --bin 01 < input.in` or with autoresolve current dir, auto-refresh and time-taken: `cargo watch -s 'time cargo run --release --bin '$(basename $PWD)' < '$(basename $PWD)'/input.in'`
+* 2019: `ocaml 01.ml < input.in`
 
 In order to test the programs you can pipe the input to the program, for example: `julia 1.jl < input.in`. The correct output is saved in the `input.ans`. Instead of doing this manually, I use my `program-tester.sh` script (see [here](https://github.com/LiquidFun/misc-scripts)), which runs the given program on all `*.in` files in the directory, and tests whether the corresponding `*.ans` file matches the given output. I have mapped that program on `Enter` in vim, which makes testing programs easy. 
 
