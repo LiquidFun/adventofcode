@@ -2,7 +2,7 @@ use std::io::stdin;
 use itertools::iproduct;
 
 fn main() {
-    let nums: Vec<i32> = stdin().lines().map(|a| a.unwrap().parse::<i32>().unwrap()).collect();    
+    let nums: Vec<i32> = stdin().lines().map(|a| a.unwrap().parse().unwrap()).collect();    
     iproduct!(&nums, &nums)
         .find(|(&a, &b)| a+b == 2020)
         .map(|(&a, &b)| println!("{}", a*b));
