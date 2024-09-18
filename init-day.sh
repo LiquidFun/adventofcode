@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 
-year="2019"
+year="2018"
 SCRIPT_DIR="$(dirname "$(realpath "$0")")"
 cookie="$(cat $SCRIPT_DIR/.aoc_tiles/session.cookie)"
 input_prefix="input"

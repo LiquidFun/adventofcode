@@ -323,7 +323,7 @@
 <a href="2019/02/02.ml">
   <img src=".aoc_tiles/tiles/2019/02.png" width="161px">
 </a>
-<a href="None">
+<a href="2019/03/03.ml">
   <img src=".aoc_tiles/tiles/2019/03.png" width="161px">
 </a>
 <a href="None">
@@ -361,17 +361,17 @@ and are written in a different programming language each year:
 
 Not part of the repository yet, since these are incomplete and the code is not good (might revisit them later):
 
-* **2019**: First time participating, solved 5 days with **Python**.
+* **2019**: First time participating, solved 5 days with **Python**. Trying OCaml in 2024.
 
 ---
 
 ### Running 
 
-* 2023: `python 01.py < input.in`
+* 2023: `python 01.py < input.in` with Python 3.12
 * 2022: `kotlinc 01.kt -include-runtime -d 01.jar && kotlin 01.jar < example.in` (or use intellij, kotlinc is very slow via CLI, 5+ seconds to compile)
 * 2021: `julia 1.jl < input.in`
-* 2020: `cargo run --release --bin 01 < input.in` or with autoresolve current dir, auto-refresh and time-taken: `cargo watch -s 'time cargo run --release --bin '$(basename $PWD)' < '$(basename $PWD)'/input.in'`
-* 2019: `ocaml 01.ml < input.in`
+* 2020: `cargo run --release --bin 01 < input.in` or with autoresolve current dir, auto-refresh and time-taken: `cargo watch -s 'time cargo run --release --bin '$(basename $PWD)' < '$(basename $PWD)'/input.in'` with Rust version 1.80.1
+* 2019: `ocaml 01.ml < input.in` with OCaml 5.2.0
 
 In order to test the programs you can pipe the input to the program, for example: `julia 1.jl < input.in`. The correct output is saved in the `input.ans`. Instead of doing this manually, I use my `program-tester.sh` script (see [here](https://github.com/LiquidFun/misc-scripts)), which runs the given program on all `*.in` files in the directory, and tests whether the corresponding `*.ans` file matches the given output. I have mapped that program on `Enter` in vim, which makes testing programs easy. 
 
