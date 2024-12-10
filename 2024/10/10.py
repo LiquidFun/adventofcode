@@ -9,10 +9,10 @@ def traverse(c, unique, some=0):
             some += traverse(c+d, unique)
     return some
 
-s1, p2 = 0, {c: set() for c in coords}
+p1, s2 = {c: set() for c in coords}, 0
 for c in coords:
     if coords[c] == 0:
-        s1 += traverse(c, p2[c])
+        s2 += traverse(c, p1[c])
 
-print(s1)
-print(sum(map(len, p2.values())))
+print(sum(map(len, p1.values())))
+print(s2)
