@@ -1,30 +1,20 @@
-lookup = {}
+from collections import Counter
 
-def duplicate(num):
-    if num in lookup:
-        return lookup[num]
-    nums = [num]
-    for i in range(25):
-        new = []
-        for n in nums:
+def blink(counts, blinks):
+    for _ in range(blinks):
+        for n, occ in list(counts.items()):
             s = str(n)
             if n == 0:
-                new.append(1)
+                counts[1] += occ
             elif len(s) % 2 == 0:
-                new.append(int(s[:len(s)//2]))
-                new.append(int(s[len(s)//2:]))
+                counts[int(s[:len(s)//2])] += occ
+                counts[int(s[len(s)//2:])] += occ
             else:
-                new.append(n * 2024)
-        nums = new
-    lookup[num] = nums
-    return nums
+                counts[n * 2024] += occ
+            counts[n] -= occ
+    return counts
 
-def solve(nums, target, i=0, s=0):
-    if i == target:
-        return len(nums)
-    return sum(solve(duplicate(n), target, i+25) for n in nums)
-
-nums = [int(a) for a in input().split()]
-print(solve(nums, 25))
-print(solve(nums, 75))
+counts = Counter([int(a) for a in input().split()])
+print(sum(blink(counts, 25).values()))
+print(sum(blink(counts, 50).values()))
 
