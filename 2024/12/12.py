@@ -1,77 +1,41 @@
-from collections import *
-from itertools import *
-from functools import *
-import sys
-import re
-
-sys.setrecursionlimit(1000000)
-
 coords = {x+1j*y: c for y, r in enumerate(open(0)) for x, c in enumerate(r.strip())}
 
-d4 = [1, 1j, -1, -1j]
-dc = [i/2 for i in [1+1j, 1-1j, -1+1j, -1-1j]]
-# print(dc)
-def adjacent(coord, dirs=d4):
+dir_corners = [.5+.5j, .5-.5j, -.5+.5j, -.5-.5j]
+def adjacent(coord, dirs=[1, 1j, -1, -1j]):
     return [coord + d for d in dirs]
 
+regions, visited = [], set()
 
-
-
-# for line in open(0):
-#     n = [int(a) for a in line.split()]
-    # re.findall(r"\d+", line)
-
-regions = []
-
-visited = set()
-
-def collect(c, char, region):
+def fill_region(c, region):
     visited.add(c)
     region.append(c)
     for adj in adjacent(c):
-        if coords.get(adj) == char:
-            if adj not in visited:
-                collect(adj, char, region)
+        if coords.get(adj) == coords[c] and adj not in visited:
+            fill_region(adj, region)
     return region
 
-
-for c in coords:
-    char = coords[c]
+for c, char in coords.items():
     if c not in visited:
-        regions.append((char, collect(c, char, [])))
+        regions.append((char, fill_region(c, [])))
 
-
-s = 0
-s2 = 0
+s1 = s2 = 0
 for char, region in regions:
     perimeter = 0
-    # # # sides = 0
     for r in region:
         for adj in adjacent(r):
             if coords.get(adj) != char and adj not in region:
-                # sides.add(adj)
                 perimeter += 1
-    corners = set()
-    for c in region:
-        for delta in adjacent(c, dc):
-            k = 0
-            ks = []
-            for adj in adjacent(delta, dc):
-                adj = round(adj.real) + round(adj.imag) * 1j
-                k += adj in region
-                if adj in region:
-                    ks.append(adj)
-            if k in [1,3]:
-                corners.add(delta)
-            if k == 2 and (ks[0] - ks[1]).real and (ks[0] - ks[1]).imag:
-                corners.add(delta)
-                corners.add(delta + 0.001)
-    # print(char, corners, len(corners) * len(region), len(corners))
+    s1 += perimeter * len(region)
 
-    s += perimeter * len(region)
+    corners = set()
+    for r in region:
+        for corner in adjacent(r, dir_corners):
+            k = [adj for adj in adjacent(corner, dir_corners) if adj in region]
+            if len(k) in [1, 3]:
+                corners.add(corner)
+            elif abs(k[0] - k[1]) != 1:
+                corners |= {corner, corner+0.1}
+
     s2 += len(corners) * len(region)
 
-
-print(s)
-
-print(s2)
+print(s1, s2, sep="\n")
