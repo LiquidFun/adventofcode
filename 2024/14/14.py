@@ -1,88 +1,21 @@
-from collections import *
-import time
-from itertools import *
-from functools import *
-# import networkx as nx
 import re
-import sys
-sys.setrecursionlimit(1000000)
 
-s1 = s2 = 0
-# coords = {x+1j*y: c for y, r in enumerate(open(0)) for x, c in enumerate(r.strip())}
+X, Y = 101, 103
+nums = [list(map(int, re.findall(r"-?\d+", line))) for line in open(0)]
 
-d4 = [1, 1j, -1, -1j]
-d8 = d4 + [1+1j, 1-1j, -1+1j, -1-1j]
-d4half = [i/2 for i in d4]
-d8half = [i/2 for i in d8]
-def adjacent(coord, dirs=d4):
-    return [coord + d for d in dirs]
-
-
-
-
-X = 101
-Y = 103
-# X = 11
-# Y = 7
-maps = []
-for line in open(0):
-    x, y, vx, vy = map(int, re.findall(r"-?\d+", line))
-    maps.append((x, y, vx, vy))
-8
-70
-284
-
-seen = set()
-
-for i in range(0, X * Y, 1):
-    counts = {}
+for i in range(X * Y):
     quadrant = [0, 0, 0, 0]
-    nines = [0] * 9
-    rows = Counter()
-    for x, y, vx, vy in maps:
+    picture = [" "] * (X * Y)
+    for x, y, vx, vy in nums:
         nx = (x + vx * i) % X
         ny = (y + vy * i) % Y
-        if (nx, ny) not in counts:
-            counts[(nx, ny)] = 0
-        counts[(nx, ny)] += 1
-        rows[ny] += 1
-        # print(x, y, nx, ny)
-        # print(nx, (nx >= 55) + (ny >= 56) * 2)
-        # print(X // 2, Y // 2)
-        if nx != X // 2 and ny != Y // 2:
-            q = (nx > X//2) + (ny > Y//2) * 2
-            #print(q)
-            quadrant[q] += 1
-            n = (nx // (X//3+1)) + (ny // (Y//3+1)) * 3
-            # print(n)
-            nines[n] += 1
-    seen.add((tuple(sorted(quadrant)), i))
+        picture[ny * X + nx] = "#"
+        if nx != X//2 and ny != Y//2:
+            quadrant[(nx > X//2) + (ny > Y//2) * 2] += 1
 
+    if i == 100:
+        print(quadrant[0] * quadrant[1] * quadrant[2] * quadrant[3])
 
-    # key = tuple(counts.items())
-    # if key in seen:
-    #     break
-    # seen.add(key)
-
-    s = quadrant[0] * quadrant[1] * quadrant[2] * quadrant[3]
-    # if any(q <= 10 for q in nines):
-    if rows[40] > 30:
-        for yy in range(Y):
-            print(end=str(yy))
-            for xx in range(X):
-                print(end="#" if (xx, yy) in counts else " ")
-                # print(end=str(counts.get((xx, yy), " ")))
-            print()
-
-        print(quadrant)
+    if ("#" * 20) in ''.join(picture):
         print(i)
-        print()
-    # time.sleep(0.1)
-
-        # print(quadrant)
-
-# print(sorted(seen, reverse=True))
-
-print(quadrant)
-
-print(s1, s2, sep="\n")
+        break
