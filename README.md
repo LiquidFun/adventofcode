@@ -1,9 +1,9 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  Advent of Code - 240/480 ⭐
+  Advent of Code - 242/482 ⭐
 </h1>
 <h1 align="center">
-  2024 - 30 ⭐ - Python
+  2024 - 32 ⭐ - Python
 </h1>
 <a href="2024/01/01.py">
   <img src=".aoc_tiles/tiles/2024/01.png" width="161px">
@@ -49,6 +49,9 @@
 </a>
 <a href="2024/15/15.py">
   <img src=".aoc_tiles/tiles/2024/15.png" width="161px">
+</a>
+<a href="2024/16/16.py">
+  <img src=".aoc_tiles/tiles/2024/16.png" width="161px">
 </a>
 <h1 align="center">
   2023 - 50 ⭐ - Python
