@@ -1,4 +1,5 @@
 import networkx as nx
+from bisect import bisect
 
 def solve(obstacles, S=70):
     G = nx.grid_graph((S+1, S+1))
@@ -9,10 +10,5 @@ def solve(obstacles, S=70):
 obstacles = [tuple(map(int, line.split(","))) for line in open(0)]
 print(solve(obstacles[:1024])-1)
 
-lo, hi = 1024, len(obstacles)-1
-while lo < hi:
-    mid = (lo + hi) // 2
-    if solve(obstacles[:mid]): lo = mid+1
-    else: hi = mid-1
-
-print(*obstacles[mid], sep=",")
+index = bisect(range(len(obstacles)), 0, key=lambda x: not solve(obstacles[:x]))
+print(*obstacles[index-1], sep=",")
