@@ -1,14 +1,14 @@
 import networkx as nx
 from bisect import bisect
 
-def solve(obstacles, S=70):
+def solve(bad, S=70):
     G = nx.grid_graph((S+1, S+1))
-    G.remove_nodes_from(obstacles)
+    G.remove_nodes_from(bad)
     return nx.has_path(G, (0,0), (S,S)) \
-           and len(nx.shortest_path(G, (0,0), (S,S)))
+       and nx.shortest_path_length(G, (0,0), (S,S))
 
-obstacles = [tuple(map(int, line.split(","))) for line in open(0)]
-print(solve(obstacles[:1024])-1)
+bad = [tuple(map(int, line.split(","))) for line in open(0)]
+print(solve(bad[:1024]))
 
-index = bisect(range(len(obstacles)), 0, key=lambda x: not solve(obstacles[:x]))
-print(*obstacles[index-1], sep=",")
+i = bisect(range(len(bad)), 0, key=lambda x: not solve(bad[:x]))
+print(*bad[i-1], sep=",")
