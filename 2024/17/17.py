@@ -1,12 +1,12 @@
 import re
-a, b, c, *nums = [int(a) for a in re.findall(r"\d+", open(0).read())]
+a, b, c, *nums = map(int, re.findall(r"\d+", open(0).read()))
 
 def compute(A=a, B=b, C=c, pointer=0):
     out = []
     while pointer < len(nums):
-        op, num = nums[pointer:pointer+2]
+        num = nums[pointer+1]
         combo = {4:A, 5:B, 6:C}.get(num, num)
-        match op:
+        match nums[pointer]:
             case 0: A = A // 2**combo
             case 1: B ^= num
             case 2: B = combo % 8
