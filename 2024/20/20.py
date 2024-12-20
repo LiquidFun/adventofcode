@@ -9,7 +9,7 @@ for c in coords:
             G.add_edge(c, c+d)
 
 S = [c for c in coords if coords[c] in 'S'][0]
-coord_to_dist = nx.shortest_path_length(G, source=S).items()
+coord_to_dist = nx.shortest_path_length(G, S).items()
 
 s1 = s2 = 0
 for c1, dist1 in coord_to_dist:
@@ -19,5 +19,4 @@ for c1, dist1 in coord_to_dist:
             s1 += diff <= 2
             s2 += diff <= 20
 
-print(s1)
-print(s2)
+print(s1, s2, sep="\n")  # use pypy instead of python
