@@ -1,4 +1,7 @@
 import networkx as nx
+from collections import *
+
+
 coords = {x+1j*y: c for y, r in enumerate(open(0)) for x, c in enumerate(r.strip().replace(".", " "))}
 
 d4 = [1, 1j, -1, -1j]
@@ -12,20 +15,44 @@ for c in coords:
 
 S = [c for c in coords if coords[c] in 'S'][0]
 E = [c for c in coords if coords[c] in 'E'][0]
-EL = nx.shortest_path_length(G, target=E)
+# EL = nx.shortest_path_length(G, target=E)
 SL = nx.shortest_path_length(G, source=S)
 print(SL)
-print(EL)
-# exit()
-L = {l: max(EL[l], SL[l]) for l in EL}
+# print(EL)
+C= Counter()
+
+sl = list(SL.items())
+seen = set()
+s2 = 0
+for i, (c1, dist1) in enumerate(sl):
+    for c2, dist2 in sl[i+1:]:
+        diff = c2-c1
+        diff = int(abs(diff.real) + abs(diff.imag))
+        if diff <= 20:
+            D = dist2 - dist1 - diff
+            if D > 0:
+                C[D] += 1
+            if D >= 100:
+                s2 += 1
+
+for asd in sorted(C.items()):
+    print(asd)
+
+print(s2)
+exit()
+# L = {l: max(EL[l], SL[l]) for l in EL}
+
+for c in coords:
+    for d in [1, 1j, -1, -1j]:
+        if coords[c] != '#' != coords[c+d]:
+            G.add_edge(c, c+d)
+            G.add_edge((c, 1), (c+d, 1))
 
 # L = [el+sl for ]
 
 # print(L)
 # print(L[S])
 # exit(0)
-
-from collections import *
 
 C = Counter()
 
