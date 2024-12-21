@@ -10,8 +10,8 @@ def path(start, end):
     pad = N if (start in N and end in N) else R
     diff = pad[end] - pad[start]
     dx, dy = int(diff.real), int(diff.imag)
-    yy = ("^" if dy < 0 else "v") * abs(dy)
-    xx = ("<" if dx < 0 else ">") * abs(dx)
+    yy = ("^"*-dy) + ("v"*dy)
+    xx = ("<"*-dx) + (">"*dx)
 
     if pad[start] + dy*1j == pad[" "]:
         return xx + yy + "A"
