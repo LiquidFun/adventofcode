@@ -81,27 +81,54 @@ def path_to(start, end, numpad):
 # print(path_to("<", "A", RC))
 # print(path_to("A", "<", RC))
 # exit()
+G = 26
+# G = 3
+
+# for r in R.replace("\n", "").strip():
+#     for r2 in R.replace("\n", "").strip():
+#         length(r, r2, 1)
+# exit()
+@cache
+def length(P, char, i):
+    if i == 0: return 1
+    s = 0
+    prev = 'A'
+    for c in path_to(P, char, i==G):
+        s += length(prev, c, i-1)
+        prev = c
+    # print(i, " : ", P, char, "  =  ", s, "   path: ", path_to(P, char, i==G))
+    return s
 
 def solve(code):
+    path_to.cache_clear()
+    length.cache_clear()
     prev = 'A'
     seq = code
-    for i in range(len(state)-1, -1, -1):
-        pad = i == len(state)-1
-        # print(i, pad)
-        new_seq = ""
-        for char in seq:
-            new_seq += path_to(prev, char, pad)
-            prev = char
-        seq = new_seq
-        print(i, len(seq))
+
+
+
+    # for i in range(len(state)-1, -1, -1):
+    #     pad = i == len(state)-1
+    #     # print(i, pad)
+    #     new_seq = ""
+    #     for char in seq:
+    #         new_seq += path_to(prev, char, pad)
+    #         prev = char
+    #     seq = new_seq
+    #     print(i, len(seq))
         # print()
-    return int(code[:-1]) * len(seq)
+    s = 0
+    for c in seq:
+        s += length(prev, c, G)
+        prev = c
+    # print(int(code[:-1]) * s)
+    return int(code[:-1]) * s
 
 print(68 * 29, 60 * 980, 68 * 179, 64 * 456, 64 * 379)
 
 def simul(code):
     robots = 26
-    return min(solve(code) for _ in range(1))
+    return min(solve(code) for _ in range(10000))
 
 # re.findall(r"\d+", line)
 for line in open(0):
