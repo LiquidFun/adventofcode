@@ -1,15 +1,13 @@
 from functools import cache
 from random import random
 
-N = "789|456|123| 0A"
-NC = {c: x+1j*y for y, r in enumerate(N.split('|')) for x, c in enumerate(r)}
-
-R = " ^A|<v>"
-RC = {c: x+1j*y for y, r in enumerate(R.split('|')) for x, c in enumerate(r)}
+N = {'7':0, '8':1, '9':2, '4':1j, '5':1+1j, '6':2+1j, 
+      '1':2j, '2':1+2j, '3':2+2j, ' ':3j, '0':1+3j, 'A':2+3j}
+R = {' ':0, '^':1, 'A':2, '<':1j, 'v':1+1j, '>':2+1j}
 
 @cache
-def path_to(start, end, numpad):
-    pad = NC if numpad else RC
+def path(start, end):
+    pad = N if (start in N and end in N) else R
     diff = pad[end] - pad[start]
     dx, dy = int(diff.real), int(diff.imag)
     yy = ("^" if dy < 0 else "v") * abs(dy)
@@ -22,20 +20,19 @@ def path_to(start, end, numpad):
     return (xx+yy if random() < 0.5 else yy+xx) + "A"  # ¯\_(ツ)_/¯
     
 @cache
-def length(code, robot, first=False, s=0):
-    if robot == 0: 
-        return len(code)
+def length(code, depth, s=0):
+    if depth == 0: return len(code)
     for i, c in enumerate(code):
-        s += length(path_to(code[i-1], c, first), robot-1)
+        s += length(path(code[i-1], c), depth-1)
     return s
 
-def solve(code, R):
-    path_to.cache_clear()
+def solve(code, max_depth):
+    path.cache_clear()
     length.cache_clear()
-    return int(code[:-1]) * length(code, R, True)
+    return int(code[:-1]) * length(code, max_depth)
 
-def simulate(code, R):
-    return min(solve(code, R) for _ in range(1000))
+def simulate(code, max_depth):
+    return min(solve(code, max_depth) for _ in range(1000))
 
 codes = open(0).read().split()
 print(sum(simulate(code, 3) for code in codes))
