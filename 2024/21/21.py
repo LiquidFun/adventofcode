@@ -16,40 +16,28 @@ def path_to(start, end, numpad):
     dy = ey-sy
     spacex, spacey = pad[" "]
     ri = up = ""
+    yy = ("^" if dy < 0 else "v") * abs(dy)
+    xx = ("<" if dx < 0 else ">") * abs(dx)
     if not (sx == spacex and sy+dy == spacey):
-        up += ("^" if dy < 0 else "v") * abs(dy)
-        up += ("<" if dx < 0 else ">") * abs(dx)
-
+        s = up = yy + xx
     if not (sx+dx == spacex and sy == spacey):
-        ri += ("<" if dx < 0 else ">") * abs(dx)
-        ri += ("^" if dy < 0 else "v") * abs(dy)
+        s = ri = xx + yy
 
     if up and ri:
         s = up if random() < 0.5 else ri
-    else:
-        s = up or ri
     return s + "A"
     
-
 @cache
-def length(P, char, i):
-    if i == 0: return 1
-    s = 0
-    prev = 'A'
-    for c in path_to(P, char, i==G):
-        s += length(prev, c, i-1)
-        prev = c
+def length(code, robot, s=0):
+    if robot == 0: return len(code)
+    for i, c in enumerate(code):
+        s += length(path_to(code[i-1], c, robot==G), robot-1)
     return s
 
 def solve(code):
     path_to.cache_clear()
     length.cache_clear()
-    prev = 'A'
-    s = 0
-    for c in code:
-        s += length(prev, c, G)
-        prev = c
-    return int(code[:-1]) * s
+    return int(code[:-1]) * length(code, G)
 
 def simulate(code):
     return min(solve(code) for _ in range(1000))
