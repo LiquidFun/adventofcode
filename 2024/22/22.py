@@ -4,9 +4,9 @@ for num in map(int, open(0)):
     last4 = (10, 10, 10, 10)
     for _ in range(2000):
         prev = num%10
-        num ^= (num*64) % 16777216
+        num ^= num*64 % 16777216
         num ^= num//32
-        num ^= (num*2048) % 16777216
+        num ^= num*2048 % 16777216
         last4 = last4[1:] + (num%10 - prev,)
         if last4 not in seen:
             seen.add(last4)
@@ -14,4 +14,4 @@ for num in map(int, open(0)):
     s1 += num
 
 print(s1)
-print(sorted(s2.values())[-1])
+print(max(s2.values()))
