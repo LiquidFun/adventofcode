@@ -84,6 +84,14 @@ def solve(modify=None):
         #     seen.add(target)
 
 
+    prev = set()
+    for node in sorted(G.nodes):
+        if node[0] in 'xy':
+            now = set(nx.descendants_at_distance(G, node, 1))
+            print(node, now-prev - {node.replace("z", "x"), node.replace("z", "y")})
+            # prev = now
+
+    # exit()
 
     # "kth", "tgs", 
 

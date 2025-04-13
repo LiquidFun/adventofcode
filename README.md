@@ -430,8 +430,9 @@ My solutions:
 * expect input via `stdin` and output (generally) 2 lines to `stdout` with the answer to part 1 and part 2.
 * (generally) parse input as it is given without modifying or pasting it into the code as an array. Parsing the strings in as little code as possible is a huge part of AoC.
 
-and are written in a different programming language each year:
+and are written in a different programming language each year (no longer true):
 
+* **2024**: I wanted to try Mojo this year, but it did not seem ready yet, as it is not open source and the installer seemed to collect suspicious telemetry. And I still wanted to try to get on the leaderboard, so I ended up again using **Python**. I did not manage to reach the leaderboard this time, as the competition using LLMs was hard to beat. However, I focused even more on writing elegant code, with more focus on readability this time. This year has some of my most elegant (and dense) code I have ever written. On average 20.6 lines of code per day (15.6 lines of code per day when excluding day 24). See [day 4](./2024/04/04.py), [day 11](./2024/11/11.py) or [day 23](./2024/23/23.py)
 * **2023**: Initially I wanted to use Rust for this year, but instead I focused on getting on the leaderboard with **Python** (successfully on day 18 and 25!). In the last days I even started using libraries (Z3/networkx). Python is my strongest language, so no surprises there. I did 5 days in Rust as well, but found it too frustrating and had too little time for 2 solutions per day.
 * **2022**: Using **Kotlin** for the first time. Playing with streams a lot, many days are completed by only using streams. The first 15 days have **Python** solutions as well in order to be able to submit quicker and get better times on the leaderboard.
 * **2021**: Using **Julia** for the first time. Because it supports numpy-like element-wise operations natively this was a great choice for AoC. If I used more Julia it would likely be my go to language for AoC right now.
@@ -445,6 +446,7 @@ Not part of the repository yet, since these are incomplete and the code is not g
 
 ### Running 
 
+* 2024: `python 01.py < input.in` with Python 3.12
 * 2023: `python 01.py < input.in` with Python 3.12
 * 2022: `kotlinc 01.kt -include-runtime -d 01.jar && kotlin 01.jar < example.in` (or use intellij, kotlinc is very slow via CLI, 5+ seconds to compile)
 * 2021: `julia 1.jl < input.in`
