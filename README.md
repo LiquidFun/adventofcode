@@ -470,8 +470,6 @@ split = [line.split() for line in open(0)]
 solve(1j**"RDLU".index(d) * int(num) for d, num, _ in split)
 solve(1j**int(c[7]) * int(c[2:7], 16) for *_, c in split)
 ```
-```
-```
 
 
 The problem is about computing the area of a polygon  on a grid, part 1 using small sizes, part 2 increasing them enormously. In part 1 I managed to get 74th place on the leaderboard by implementing a naive solution which painted all lines in a 2D array, found the first line, and guessed that the polygon has no intersections with itself. Then a floodfill was applied on one side of the polygon. I was lucky guessing the correct side which meant I was fast enough for the leaderboard. The solution for part 2 had 123 lines of code and did take me quite a while to code. However, through various optimizations I was able to reduce it to 8 lines. I learned afterwards about the [Shoelace formula](https://en.wikipedia.org/wiki/Shoelace_formula) used to compute the area of a simple polygon. Furthermore, I used imaginary numbers in order to encode the x,y coordinates, shortening the code even more.
