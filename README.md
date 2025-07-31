@@ -433,10 +433,10 @@ My solutions:
 and are written in a different programming language each year (no longer true):
 
 * **2024**: I wanted to try Mojo this year, but it did not seem ready yet, as it is not open source and the installer seemed to collect suspicious telemetry. And I still wanted to try to get on the leaderboard, so I ended up again using **Python**. I did not manage to reach the leaderboard this time, as the competition using LLMs was hard to beat. However, I focused even more on writing elegant code, with more focus on readability this time. This year has some of my most elegant (and dense) code I have ever written. On average 20.6 lines of code per day (15.6 lines of code per day when excluding day 24). See [day 4](./2024/04/04.py), [day 11](./2024/11/11.py) or [day 23](./2024/23/23.py)
-* **2023**: Initially I wanted to use Rust for this year, but instead I focused on getting on the leaderboard with **Python** (successfully on day 18 and 25!). In the last days I even started using libraries (Z3/networkx). Python is my strongest language, so no surprises there. I did 5 days in Rust as well, but found it too frustrating and had too little time for 2 solutions per day.
-* **2022**: Using **Kotlin** for the first time. Playing with streams a lot, many days are completed by only using streams. The first 15 days have **Python** solutions as well in order to be able to submit quicker and get better times on the leaderboard.
-* **2021**: Using **Julia** for the first time. Because it supports numpy-like element-wise operations natively this was a great choice for AoC. If I used more Julia it would likely be my go to language for AoC right now.
-* **2020**: Using **Rust** for the first time. Solved 8 days initially. Revisited in 2024 and solved all of them. This time I liked Rust much more. I ended up writing very concise and functional Rust. After getting used to it it was quite fun. All rust solutions are below 100 loc (as calculated by `cloc`).
+* **2023**: Initially I wanted to use Rust for this year, but instead I focused on getting on the leaderboard with **Python** (successfully on day 18 and 25!). In the last days I even started using libraries (Z3/networkx). Python is my strongest language, so no surprises there. I did 5 days in Rust as well, but found it too frustrating and had too little time for 2 solutions per day. 23.3 loc on average per day.
+* **2022**: Using **Kotlin** for the first time. Playing with streams a lot, many days are completed by only using streams. The first 15 days have **Python** solutions as well in order to be able to submit quicker and get better times on the leaderboard. The Kotlin solutions have on average 42.5 loc.
+* **2021**: Using **Julia** for the first time. Because it supports numpy-like element-wise operations natively this was a great choice for AoC. If I used more Julia it would likely be my go to language for AoC right now. 33 loc on average per day.
+* **2020**: Using **Rust** for the first time. Solved 8 days initially. Revisited in 2024 and solved all of them. This time I liked Rust much more. I ended up writing very concise and functional Rust. After getting used to it it was quite fun. All rust solutions are below 100 loc (as calculated by `cloc`), all but one are below 60, with an average of 32.6 loc per day.
 
 Not part of the repository yet, since these are incomplete and the code is not good (might revisit them later):
 
@@ -457,5 +457,5 @@ In order to test the programs you can pipe the input to the program, for example
 
 Programs are initialized with the `init-day.sh` script. I.e. typing `init-day.sh 10` initializes the 10th day by creating a folder named `10` and downloading the input test case with the `session.cookie`.
 
-My favorite solution [2023/18](2023/18/18.py)
+My favorite solution is [2023/18](2023/18/18.py).
 
