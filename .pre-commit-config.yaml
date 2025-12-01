@@ -4,7 +4,7 @@ repos:
     hooks:
       - id: aoc-tiles
         args: 
-          - --language-sorting=jl,kt,py,rs
+          - --language-sorting=jl,kt,py,rs,js
           - --exclude-patterns=2021/*/*.apl,2021/*/*.py,2021/*/*.cpp,2023/*/*.rs
           - --auto-add-tiles-to-git=amend
           - --count-as-solved-when=on_leaderboard
