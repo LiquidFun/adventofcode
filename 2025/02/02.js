@@ -4,7 +4,7 @@ const sum = arr => arr.reduce((a,b) => +a + +b);
 const nums = require("fs").readFileSync(0, "utf8").trim()
   .split(",")
   .map(line => line.split`-`.map(Number))
-  .flatMap(([a, b]) => range(b-a).map(i => i+a+""))
+  .flatMap(([a, b]) => range(b-a+1).map(i => i+a+""))
 
 const isEqual = s => s.slice(s.length/2).repeat(2) == s
 const isAnyEqual = s => range(s.length/2|0)
