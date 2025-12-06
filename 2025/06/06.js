@@ -1,19 +1,19 @@
-let lines = require("fs").readFileSync(0, "utf8").split("\n")
-lines.pop()
-let nums = lines.map(line => line.trim().split(/\s+/))
-let ops = nums.pop()
+Array.prototype.sumPrint = function () { console.log(this.reduce((a, b) => a + b)) }
 
-s1 = nums[0].map((_, i) => nums.map(n => +n[i]))
-  .map((n, i) => n.reduce((a, b) => ops[i] === '*' ? a * b : a + b))
-  .reduce((a, b) => a + b)
-
-console.log(s1)
-
+const lines = require("fs").readFileSync(0, "utf8").trimEnd().split("\n")
+const nums = lines.map(line => line.trim().split(/\s+/))
+const ops = nums.pop()
 lines.pop()
 
-s2 = [...lines[0]].map((_, i) => +lines.map(n => n[i]).join(""))
+const transpose = arr => [...arr[0]].map((_, i) => arr.map(n => n[i]))
+
+transpose(nums)
+  .map((n, i) => eval(n.join(ops[i])))
+  .sumPrint()
+
+transpose(lines)
+  .map(l => +l.join(""))
   .join()
   .split(",0,")
   .map((n, i) => eval(n.replaceAll(",", ops[i])))
-  .reduce((a, b) => a + b)
-console.log(s2)
+  .sumPrint()
