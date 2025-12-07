@@ -1,21 +1,17 @@
-grid = require("fs").readFileSync(0, "utf8").trim().split("\n").map(line => line.split(""))
+let grid = require("fs").readFileSync(0, "utf8").trim().split("\n")
 
-function solve(quantum) {
-  let memo = {}
-
-  function descend(y, x) {
-    let key = [y, x]
-    if (key in memo)
-      return quantum ? memo[key] : 0
-    if (grid[y]?.[x] == "^")
-      return memo[key] = descend(y, x+1) + descend(y, x-1) + 1
-    if (grid[y]?.[x] == ".")
-      return memo[key] = descend(y+1, x)
-    return 0
-  }
-  let startX = grid[0].indexOf("S")
-  console.log(descend(1, startX) + quantum)
+function laser(y, x, memo) {
+  if ([y, x] in memo)
+    return memo[[y, x]]
+  if (grid[y]?.[x] == "^")
+    return memo[[y, x]] = laser(y, x+1, memo) + laser(y, x-1, memo) + 1
+  if (grid[y]?.[x] == ".")
+    return memo[[y, x]] = laser(y+1, x, memo)
+  return 0
 }
 
-solve(false)
-solve(true)
+let startX = grid[0].indexOf("S")
+const alwaysZero = new Proxy({}, { get: () => 0 });
+
+console.log(laser(1, startX, alwaysZero))
+console.log(laser(1, startX, {}) + 1)
