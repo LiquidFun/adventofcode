@@ -10,7 +10,7 @@ let sortedPairs = coords
 
 let unions = coords.map((_, i) => new Set([i]))
 
-for (let [i, [u1, u2]] of sortedPairs.entries()) {
+sortedPairs.forEach(([u1, u2], i) => {
   unions[u1].forEach(u => unions[u] = unions[u2].add(u))
 
   if (i == 1000)
@@ -23,4 +23,4 @@ for (let [i, [u1, u2]] of sortedPairs.entries()) {
 
   if (unions[0].size == 1000)
     process.exit(console.log(coords[u1][0] * coords[u2][0]))
-}
+})
