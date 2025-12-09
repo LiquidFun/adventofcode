@@ -11,8 +11,7 @@ let sortedPairs = coords
 let unions = coords.map((_, i) => new Set([i]))
 
 for (let [i, [u1, u2]] of sortedPairs.entries()) {
-  unions[u1].forEach(u => unions[u2].add(u))
-  unions[u1].forEach(u => unions[u] = unions[u2])
+  unions[u1].forEach(u => unions[u] = unions[u2].add(u))
 
   if (i == 1000)
     console.log(

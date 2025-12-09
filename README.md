@@ -1,6 +1,6 @@
 <!-- AOC TILES BEGIN -->
 <h1 align="center">
-  Advent of Code - 276/516 ⭐
+  Advent of Code - 276/518 ⭐
 </h1>
 <h1 align="center">
   2025 - 16 ⭐ - JavaScript
