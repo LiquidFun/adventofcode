@@ -1,8 +1,8 @@
 let lines = require("fs").readFileSync(0, "utf8").trim().split("\n")
 let adj = new Map(lines
   .map(line => line.split(": "))
-  .map(([from, to]) => [from, to.split(" ")]))
-adj.set("out", [])
+  .map(([from, to]) => [from, new Set(to.split(" "))]))
+adj.set("out", new Set())
 
 function descendants(curr, visited = new Set()) {
   if (visited.has(curr)) return
@@ -17,14 +17,10 @@ function ancestors(curr) {
 
 function countPaths(start, end) {
   let allowed = descendants(start).intersection(ancestors(end))
-  let s = 0, head = 0
-  let queue = [start]
-  while (head < queue.length) {
-    let curr = queue[head++]
-    s += curr == end
-    queue.push(...adj.get(curr).filter(node => allowed.has(node)))
-  }
-  return s
+  let queue = [start], head = 0
+  while (head < queue.length)
+    queue.push(...allowed.intersection(adj.get(queue[head++])))
+  return queue.filter(node => node == end).length
 }
 
 console.log(countPaths("you", "out"))
