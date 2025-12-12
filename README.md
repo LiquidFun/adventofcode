@@ -6,40 +6,40 @@
   2025 - 24 ⭐ - JavaScript
 </h1>
 <a href="2025/01/01.js">
-  <img src=".aoc_tiles/tiles/2025/01.gif" width="161px">
+  <img src=".aoc_tiles/tiles/2025/01.gif" width="203px">
 </a>
 <a href="2025/02/02.js">
-  <img src=".aoc_tiles/tiles/2025/02.gif" width="161px">
+  <img src=".aoc_tiles/tiles/2025/02.gif" width="203px">
 </a>
 <a href="2025/03/03.js">
-  <img src=".aoc_tiles/tiles/2025/03.gif" width="161px">
+  <img src=".aoc_tiles/tiles/2025/03.gif" width="203px">
 </a>
 <a href="2025/04/04.js">
-  <img src=".aoc_tiles/tiles/2025/04.gif" width="161px">
+  <img src=".aoc_tiles/tiles/2025/04.gif" width="203px">
 </a>
 <a href="2025/05/05.js">
-  <img src=".aoc_tiles/tiles/2025/05.gif" width="161px">
+  <img src=".aoc_tiles/tiles/2025/05.gif" width="203px">
 </a>
 <a href="2025/06/06.js">
-  <img src=".aoc_tiles/tiles/2025/06.gif" width="161px">
+  <img src=".aoc_tiles/tiles/2025/06.gif" width="203px">
 </a>
 <a href="2025/07/07.js">
-  <img src=".aoc_tiles/tiles/2025/07.gif" width="161px">
+  <img src=".aoc_tiles/tiles/2025/07.gif" width="203px">
 </a>
 <a href="2025/08/08.js">
-  <img src=".aoc_tiles/tiles/2025/08.gif" width="161px">
+  <img src=".aoc_tiles/tiles/2025/08.gif" width="203px">
 </a>
 <a href="2025/09/09.js">
-  <img src=".aoc_tiles/tiles/2025/09.gif" width="161px">
+  <img src=".aoc_tiles/tiles/2025/09.gif" width="203px">
 </a>
 <a href="2025/10/10.js">
-  <img src=".aoc_tiles/tiles/2025/10.gif" width="161px">
+  <img src=".aoc_tiles/tiles/2025/10.gif" width="203px">
 </a>
 <a href="2025/11/11.js">
-  <img src=".aoc_tiles/tiles/2025/11.gif" width="161px">
+  <img src=".aoc_tiles/tiles/2025/11.gif" width="203px">
 </a>
 <a href="2025/12/12.js">
-  <img src=".aoc_tiles/tiles/2025/12.gif" width="161px">
+  <img src=".aoc_tiles/tiles/2025/12.gif" width="203px">
 </a>
 <h1 align="center">
   2024 - 50 ⭐ - Python
