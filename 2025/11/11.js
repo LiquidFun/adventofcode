@@ -2,7 +2,7 @@ let lines = require("fs").readFileSync(0, "utf8").trim().split("\n")
 let adj = new Map(lines
   .map(line => line.split(": "))
   .map(([from, to]) => [from, new Set(to.split(" "))]))
-adj.set("out", new Set())
+  .set("out", new Set())
 
 function descendants(curr, visited = new Set()) {
   if (visited.has(curr)) return
