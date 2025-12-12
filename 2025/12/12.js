@@ -1,11 +1,12 @@
-let [reqs, ...shapes] = require("fs").readFileSync(0, "utf8").trim().split("\n\n").reverse()
-
-let s1 = 0
-reqs.split("\n").forEach(line => {
-  let [area, needed] = line.split(": ")
-  area = eval(area.replace("x", "*"))
-  let sum = eval(needed.replaceAll(" ", "+")) * 9
-  s1 += area >= sum
-})
-
-console.log(s1)
+console.log(
+  require("fs")
+  .readFileSync(0, "utf8")
+  .trim()
+  .split("\n\n")
+  .at(-1)
+  .replaceAll("x", "/9*")
+  .replaceAll(": ", ">=")
+  .replaceAll(" ", "+")
+  .split("\n")
+  .filter(x => eval(x) > 0)
+  .length)
